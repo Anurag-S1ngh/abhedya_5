@@ -1,19 +1,44 @@
-import { Button } from "@/components/ui/button"
+import { Link002 } from "@/components/ui/cssLinkButton"
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
+import Navbar from "@/components/ui/navbar"
+import WaterRipple from "@/components/ui/water-ripple"
+import Link from "next/link"
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
+    <WaterRipple
+      rainIntensity={0.2}
+      className="h-screen w-full"
+      resolution={256}
+      dropRadius={40}
+      perturbance={1}
+      interactive={true}
+      textConfig={{
+        lines: ["Abhedya"],
+        fontSize: 250,
+        color: "rgba(255,255,255,0.25)",
+        fontWeight: "1000",
+      }}
+      backgroundColor="#FF7500"
+    >
+      <Navbar />
+      <div className="fixed right-0 bottom-0 left-0 flex items-center justify-between px-6 py-6 md:px-12">
+        <h1 className="max-w-xl text-3xl leading-tight font-semibold text-white md:text-3xl">
+          Leverage AI to grow valuable skills through immersive realistic role
+          play scenarios
+        </h1>
+        <div className="flex items-center gap-6">
+          <InteractiveHoverButton className="border-white bg-transparent text-sm">
+            <Link href={"/game"}>Try now</Link>
+          </InteractiveHoverButton>
+          <Link002
+            className="text-md font-medium text-white opacity-90 hover:opacity-100"
+            href="/"
+          >
+            Log In
+          </Link002>
         </div>
       </div>
-    </div>
+    </WaterRipple>
   )
 }
