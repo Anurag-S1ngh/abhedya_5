@@ -43,7 +43,7 @@ export default function NotFound404({
           <EmptyMedia variant="icon">
             <Ghost className="h-16 w-16 text-muted-foreground" />
           </EmptyMedia>
-          <EmptyTitle className="bg-gradient-to-r from-primary via-primary/80 to-blue-500 bg-clip-text text-4xl font-bold text-transparent">
+          <EmptyTitle className="bg-gradient-to-r from-primary via-primary/80 to-[#FF7500] bg-clip-text text-4xl font-bold text-transparent">
             404
           </EmptyTitle>
           <EmptyDescription className="text-lg">{description}</EmptyDescription>

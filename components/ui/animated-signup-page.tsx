@@ -1,13 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeOff, Mail, Sparkles } from "lucide-react"
+import { Eye, EyeOff, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
+import { Link004 } from "./cssLinkButton"
 
 interface PupilProps {
   size?: number
@@ -311,11 +311,11 @@ function LoginPage() {
 
     // Mock authentication - validate against dummy credentials
     if (email === "erik@gmail.com" && password === "1234") {
-      toast.success("Welcome back! Redirecting...")
-      router.push("/")
+      toast.success("Account created! Welcome aboard.")
+      router.push("/game")
     } else {
       setError("Invalid email or password. Please try again.")
-      toast.error("Sign in failed. Check your credentials.")
+      toast.error("Sign up failed. Check your credentials.")
     }
 
     setIsLoading(false)
@@ -326,12 +326,12 @@ function LoginPage() {
       {/* Left Content Section */}
       <div className="relative hidden flex-col justify-between bg-gradient-to-br from-primary/90 via-primary to-primary/80 p-12 text-primary-foreground lg:flex">
         <div className="relative z-20">
-          <div className="flex items-center gap-2 text-lg font-semibold">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary-foreground/10 backdrop-blur-sm">
-              <Sparkles className="size-4" />
-            </div>
-            <span>YourBrand</span>
-          </div>
+          <Link004
+            href="/"
+            className="flex w-min items-center gap-2 text-lg font-semibold"
+          >
+            <span className="uppercase">prodyogiki</span>
+          </Link004>
         </div>
 
         <div className="relative z-20 flex h-[500px] items-end justify-center">
@@ -650,27 +650,6 @@ function LoginPage() {
           </div>
         </div>
 
-        <div className="relative z-20 flex items-center gap-8 text-sm text-primary-foreground/60">
-          <a
-            href="#"
-            className="transition-colors hover:text-primary-foreground"
-          >
-            Privacy Policy
-          </a>
-          <a
-            href="#"
-            className="transition-colors hover:text-primary-foreground"
-          >
-            Terms of Service
-          </a>
-          <a
-            href="#"
-            className="transition-colors hover:text-primary-foreground"
-          >
-            Contact
-          </a>
-        </div>
-
         {/* Decorative elements */}
         <div className="bg-grid-white/[0.05] absolute inset-0 bg-[size:20px_20px]" />
         <div className="absolute top-1/4 right-1/4 size-64 rounded-full bg-primary-foreground/10 blur-3xl" />
@@ -691,7 +670,7 @@ function LoginPage() {
           {/* Header */}
           <div className="mb-10 text-center">
             <h1 className="mb-2 text-3xl font-bold tracking-tight">
-              Welcome back!
+              Create an Account
             </h1>
             <p className="text-sm text-muted-foreground">
               Please enter your details
@@ -746,24 +725,6 @@ function LoginPage() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
-                <Label
-                  htmlFor="remember"
-                  className="cursor-pointer text-sm font-normal"
-                >
-                  Remember me
-                </Label>
-              </div>
-              <a
-                href="#"
-                className="text-sm font-medium text-primary hover:underline"
-              >
-                Forgot password?
-              </a>
-            </div>
-
             {error && (
               <div className="rounded-lg border border-red-900/30 bg-red-950/20 p-3 text-sm text-red-400">
                 {error}
@@ -776,30 +737,18 @@ function LoginPage() {
               size="lg"
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Log in"}
+              {isLoading ? "Loading" : "Sign up"}
             </Button>
           </form>
-
-          {/* Social Login */}
-          <div className="mt-6">
-            <Button
-              variant="outline"
-              className="h-12 w-full border-border/60 bg-background hover:bg-accent"
-              type="button"
-            >
-              <Mail className="mr-2 size-5" />
-              Log in with Google
-            </Button>
-          </div>
 
           {/* Sign Up Link */}
           <div className="mt-8 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
             <a
-              href="/signup"
+              href="/signin"
               className="font-medium text-foreground hover:underline"
             >
-              Sign Up
+              Sign In
             </a>
           </div>
         </div>

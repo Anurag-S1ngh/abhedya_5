@@ -1,56 +1,45 @@
-import { Link002 } from "@/components/ui/cssLinkButton"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
+import HomeRipple from "@/components/ui/home-ripple"
 import Navbar from "@/components/ui/navbar"
+import { SmoothCursor } from "@/components/ui/smooth-cursor"
 import StairsPreloader from "@/components/ui/stairs-preloader"
-import WaterRipple from "@/components/ui/water-ripple"
-import Link from "next/link"
 
 export default function Page() {
   return (
     <>
+      <SmoothCursor
+        springConfig={{
+          damping: 45,
+          stiffness: 40000,
+          mass: 1,
+          restDelta: 0.001,
+        }}
+      />
       <StairsPreloader
         columns={8}
         duration={1000}
         overlayHoldDuration={0}
         color="#FDECC8"
       />
-      <WaterRipple
-        shininess={2}
-        rainDrops={0.01}
-        rainIntensity={0.2}
-        className="h-screen w-full"
-        resolution={256}
-        dropRadius={55}
-        perturbance={3}
-        interactive={true}
-        tiltStrength={10}
-        textConfig={{
-          lines: ["ABHEDYA"],
-          fontSize: 220,
-          color: "#FDECC8",
-          fontWeight: "1000",
-        }}
-        backgroundColor="#FF7500"
-      >
+      <HomeRipple>
         <Navbar />
-        <div className="fixed right-0 bottom-0 left-0 flex items-center justify-between px-6 py-6 md:px-12">
-          <h1 className="max-w-xl text-3xl leading-tight font-semibold text-white md:text-3xl">
-            Leverage AI to grow valuable skills through immersive realistic role
-            play scenarios
-          </h1>
-          <div className="flex items-center gap-6">
-            <InteractiveHoverButton className="border-white bg-transparent text-sm">
-              <Link href={"/game"}>Try now</Link>
-            </InteractiveHoverButton>
-            <Link002
-              className="text-md font-medium text-white opacity-90 hover:opacity-100"
-              href="/"
-            >
-              Log Out
-            </Link002>
+
+        {/* Bottom bar */}
+        <div className="fixed right-0 bottom-0 left-0 px-4 py-4 sm:px-6 sm:py-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <p className="max-w-2xl text-2xl leading-tight font-semibold tracking-tight text-[#FDECC8]/80 sm:text-4xl">
+              Decrypt ancient signs to expose hidden layers inside immersive
+              puzzle driven hunt worlds
+            </p>
+            {/* Hidden on mobile — shown in navbar mobile menu instead */}
+            <div className="hidden items-center gap-4 sm:flex sm:gap-6">
+              <InteractiveHoverButton className="border-[#FDECC8] bg-transparent text-sm text-[#FDECC8]">
+                Log Out
+              </InteractiveHoverButton>
+            </div>
           </div>
         </div>
-      </WaterRipple>
+      </HomeRipple>
     </>
   )
 }

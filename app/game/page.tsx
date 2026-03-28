@@ -3,6 +3,7 @@
 import Navbar from "@/components/ui/navbar"
 import { ArrowRight, Check, X } from "lucide-react"
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { parseMarkdown } from "./parseMarkdown"
 
 // ── Sample questions ──────────────────────────────────────────────────────────
@@ -45,9 +46,17 @@ export default function GamePage() {
   }
 
   function handleSubmit() {
-    if (!answer.trim()) return
-    // TODO: wire to backend
-    console.log(`Q${q.id}:`, answer)
+    if (!answer.trim()) {
+      toast.error("Please enter an answer before submitting.")
+      return
+    }
+    // TODO: wire to backend — simulate correct/wrong for now
+    const isCorrect = Math.random() > 0.5
+    if (isCorrect) {
+      toast.success("Correct! Well done.")
+    } else {
+      toast.error("Wrong answer. Try again!")
+    }
     if (current < total - 1) go(current + 1)
   }
 
@@ -64,19 +73,19 @@ export default function GamePage() {
     <div className="flex min-h-screen flex-col bg-[#FDECC8] text-[#1A1A1A]">
       <Navbar dark />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col py-8 sm:py-14">
+      <div className="flex w-full flex-1 flex-col px-6 py-8 sm:py-14">
         {/* Question counter */}
-        <div className="mb-12 flex items-center justify-between">
-          <h2 className="text-3xl font-black tracking-tight text-[#FF7500] uppercase sm:text-5xl">
+        <div className="mb-8 flex items-center justify-between sm:mb-12">
+          <h2 className="text-2xl font-black tracking-tight text-[#FF7500] uppercase sm:text-4xl md:text-5xl">
             Question {current + 1}
           </h2>
         </div>
 
         {/* Question card */}
-        <div className="flex flex-1 flex-col gap-6">
+        <div className="flex flex-1 flex-col gap-5 sm:gap-6">
           {/* Question text */}
           <div
-            className="prose prose-invert max-w-none text-base leading-relaxed sm:text-xl"
+            className="prose max-w-none text-base leading-relaxed text-[#1A1A1A] sm:text-lg md:text-xl"
             dangerouslySetInnerHTML={{ __html: parseMarkdown(q.text) }}
           />
 

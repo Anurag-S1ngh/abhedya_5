@@ -579,7 +579,8 @@ export default function WaterRipple({
     function step() {
       if (s.destroyed) return
       const gl = s.gl!
-      const canvas = canvasRef.current!
+      const canvas = canvasRef.current
+      if (!canvas) return
 
       // Update simulation
       gl.viewport(0, 0, resolution, resolution)
