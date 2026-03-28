@@ -4,19 +4,29 @@ import { Menu, X } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { Link004 } from "./cssLinkButton"
-import { InteractiveHoverButton } from "./interactive-hover-button"
 
 const navLinks = [
   { label: "Profile", href: "/" },
-  { label: "Game Page", href: "/" },
+  { label: "Game Page", href: "/game" },
+  { label: "Leaderboard", href: "/leaderboard" },
   { label: "Events", href: "/" },
 ]
 
-export default function Navbar() {
+interface NavbarProps {
+  dark?: boolean // true = dark text (for light bg pages)
+}
+
+export default function Navbar({ dark = false }: NavbarProps) {
   const [open, setOpen] = useState(false)
 
+  const color = dark ? "#1A1A1A" : "#FDECC8"
+  const borderColor = dark ? "rgba(26,26,26,0.15)" : "rgba(255,255,255,0.2)"
+
   return (
-    <nav className="w-full bg-transparent px-6 py-3 text-white">
+    <nav
+      className="w-full bg-transparent px-6 py-4"
+      style={{ color }}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between">
         {/* Logo */}
         <Link
@@ -32,7 +42,7 @@ export default function Navbar() {
             <li key={link.label}>
               <Link004
                 href={link.href}
-                className="text-sm font-medium opacity-90 transition-opacity hover:opacity-100"
+                className="font-medium opacity-90 transition-opacity hover:opacity-100"
               >
                 {link.label}
               </Link004>
@@ -44,13 +54,13 @@ export default function Navbar() {
         <div className="hidden items-center gap-6 md:flex">
           <Link004
             href="/signup"
-            className="text-sm font-medium opacity-90 transition-opacity hover:opacity-100"
+            className="font-medium opacity-90 transition-opacity hover:opacity-100"
           >
             Sign Up
           </Link004>
           <Link004
             href="/login"
-            className="text-sm font-medium opacity-90 transition-opacity hover:opacity-100"
+            className="font-medium opacity-90 transition-opacity hover:opacity-100"
           >
             Log in
           </Link004>
@@ -68,7 +78,10 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="mt-3 flex flex-col gap-4 border-t border-white/20 pt-4 md:hidden">
+        <div
+          className="mt-3 flex flex-col gap-4 border-t pt-4 md:hidden"
+          style={{ borderColor }}
+        >
           {navLinks.map((link) => (
             <Link
               key={link.label}
@@ -85,12 +98,6 @@ export default function Navbar() {
             </Link>
             <Link href="/login" className="text-sm font-medium opacity-90">
               Log in
-            </Link>
-            <Link
-              href="/try"
-              className="rounded-full border border-white px-5 py-1.5 text-sm font-medium"
-            >
-              Try now
             </Link>
           </div>
         </div>

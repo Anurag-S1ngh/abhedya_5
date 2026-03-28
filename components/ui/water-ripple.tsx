@@ -29,6 +29,12 @@ interface WaterRippleProps {
   backgroundColor?: string
   // Rain intensity: 0 = off, 1 = default, higher = more distortion
   rainIntensity?: number
+  // Shininess of ripple specular highlight: 0 = none, 1 = default, higher = more shine
+  shininess?: number
+  // Number of rain drops per interval tick (default 1)
+  rainDrops?: number
+  // Tilt strength on mouse move (0 = off, default 8)
+  tiltStrength?: number
 }
 
 // WebGL config detection
@@ -147,6 +153,9 @@ export default function WaterRipple({
   textColor = "#f5f0e8",
   backgroundColor = "#1a1a2e",
   rainIntensity = 1,
+  shininess = 1,
+  rainDrops = 1,
+  tiltStrength = 8,
 }: WaterRippleProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -208,6 +217,7 @@ export default function WaterRipple({
   })
 
   const buildTextureRef = useRef<(() => void) | null>(null)
+  const tiltRef = useRef({ x: 0, y: 0, tx: 0, ty: 0, raf: 0 })
 
   const dropAt = useCallback(
     (x: number, y: number, radius: number, strength: number) => {
@@ -406,6 +416,7 @@ export default function WaterRipple({
       uniform float time;
       uniform vec2 u_mouse;
       uniform vec2 textureSize;
+      uniform float u_shininess;
       varying vec2 ripplesCoord;
       varying vec2 backgroundCoord;
       const float PI = 3.141592653589793;
@@ -436,16 +447,20 @@ export default function WaterRipple({
         vec2 offset = -normal.xz * 0.7 * (1.0 - luminance * 0.3) + mouseOffset * 0.7;
         vec2 blurCoord = backgroundCoord + offset * perturbance * 0.8;
         vec4 distorted = texture2D(samplerBackground, blurCoord);
-        float fresnel = pow(1.0 - max(0.0, dot(offset, normalize(vec2(-0.6, 1.0)))), 50.0);
+        float fresnel = pow(1.0 - max(0.0, dot(offset, normalize(vec2(-0.6, 1.0)))), 30.0);
         float brightness = max(max(distorted.r, distorted.g), distorted.b);
-        float fresnelIntensity = clamp(fresnel * 0.35 * (brightness * 0.5), 0.02, 0.55);
+        float fresnelIntensity = clamp(fresnel * 0.7 * (brightness * 0.5 + 0.5), 0.02, 0.85);
+        // specular white highlight on ripple peaks
+        float specular = pow(max(0.0, normal.y), 12.0) * length(offset) * 18.0 * u_shininess;
+        specular = clamp(specular, 0.0, 0.7);
         float timeShift = time * 0.2;
         vec3 interferenceColor = vec3(
           sin(2.0 * fresnel * PI + 1.0 + timeShift),
           sin(2.0 * fresnel * PI + 2.0 + timeShift),
           sin(2.0 * fresnel * PI + 4.0 + timeShift)
-        ) * 0.05;
+        ) * 0.08;
         vec4 finalColor = mix(distorted, distorted + vec4(interferenceColor, 0.0), fresnelIntensity);
+        finalColor.rgb += vec3(specular);
         finalColor.a = 1.0;
         finalColor = addFilmGrain(finalColor, gl_FragCoord.xy / textureSize);
         gl_FragColor = finalColor;
@@ -453,6 +468,7 @@ export default function WaterRipple({
     )
     gl.useProgram(s.renderProgram.id)
     gl.uniform2fv(s.renderProgram.locations["delta"], s.textureDelta)
+    gl.uniform1f(s.renderProgram.locations["u_shininess"], shininess)
 
     // Background texture
     s.backgroundTexture = gl.createTexture()!
@@ -580,12 +596,22 @@ export default function WaterRipple({
       // Auto-rain when idle
       if (!s.isRaining && Date.now() - s.lastMouseMove > 1000) {
         s.isRaining = true
-        s.rainInterval = setInterval(() => {
-          if (s.destroyed) return
-          const x = Math.random() * canvas.width
-          const y = Math.random() * canvas.height
-          dropAt(x, y, dropRadius * 1.2 * rainIntensity, 0.06 * rainIntensity)
-        }, Math.max(16, 40 / rainIntensity))
+        s.rainInterval = setInterval(
+          () => {
+            if (s.destroyed) return
+            for (let i = 0; i < rainDrops; i++) {
+              const x = Math.random() * canvas.width
+              const y = Math.random() * canvas.height
+              dropAt(
+                x,
+                y,
+                dropRadius * 1.2 * rainIntensity,
+                0.06 * rainIntensity
+              )
+            }
+          },
+          Math.max(16, 40 / rainIntensity)
+        )
       }
 
       // Render
@@ -665,7 +691,6 @@ export default function WaterRipple({
     backgroundColor,
   ])
 
-
   // Convert pointer position (relative to container) to canvas pixel coords.
   // The canvas is CSS-scaled by 1.15 but its pixel dimensions match the container,
   // so we just use the raw offset — no scale correction needed in pixel space.
@@ -698,9 +723,30 @@ export default function WaterRipple({
         }
       }
 
+      // tilt target: map 0-1 → -strength..+strength degrees
+      if (tiltStrength > 0) {
+        const t = tiltRef.current
+        t.tx = (ny - 0.5) * tiltStrength * 2   // rotateX: top = positive tilt
+        t.ty = (nx - 0.5) * -tiltStrength * 2  // rotateY: right = negative tilt
+
+        cancelAnimationFrame(t.raf)
+        const spring = () => {
+          t.x += (t.tx - t.x) * 0.1
+          t.y += (t.ty - t.y) * 0.1
+          const canvas = canvasRef.current
+          if (canvas) {
+            canvas.style.transform = `scale(1.15) perspective(800px) rotateX(${t.x}deg) rotateY(${t.y}deg)`
+          }
+          if (Math.abs(t.tx - t.x) > 0.01 || Math.abs(t.ty - t.y) > 0.01) {
+            t.raf = requestAnimationFrame(spring)
+          }
+        }
+        t.raf = requestAnimationFrame(spring)
+      }
+
       dropAt(x, y, dropRadius * 0.5, 0.01)
     },
-    [dropAt, dropRadius, pointerToCanvas]
+    [dropAt, dropRadius, pointerToCanvas, tiltStrength]
   )
 
   const handleMouseDown = useCallback(
@@ -712,7 +758,27 @@ export default function WaterRipple({
     [dropAt, dropRadius, pointerToCanvas]
   )
 
-  const handleMouseLeave = useCallback(() => {}, [])
+  const handleMouseLeave = useCallback(() => {
+    if (tiltStrength <= 0) return
+    const t = tiltRef.current
+    t.tx = 0
+    t.ty = 0
+    cancelAnimationFrame(t.raf)
+    const spring = () => {
+      t.x += (0 - t.x) * 0.1
+      t.y += (0 - t.y) * 0.1
+      const canvas = canvasRef.current
+      if (canvas) {
+        canvas.style.transform = `scale(1.15) perspective(800px) rotateX(${t.x}deg) rotateY(${t.y}deg)`
+      }
+      if (Math.abs(t.x) > 0.01 || Math.abs(t.y) > 0.01) {
+        t.raf = requestAnimationFrame(spring)
+      } else if (canvas) {
+        canvas.style.transform = "scale(1.15)"
+      }
+    }
+    t.raf = requestAnimationFrame(spring)
+  }, [tiltStrength])
 
   const handleTouchMove = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {

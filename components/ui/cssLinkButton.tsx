@@ -179,15 +179,14 @@ const Link004 = ({
     <a
       href={href}
       className={cn(
-        "group relative flex items-center",
+        "group relative flex items-center overflow-hidden",
         className,
-        "before:pointer-events-none before:absolute before:left-0 before:w-full before:bg-white before:content-['']",
-        "before:origin-right before:scale-x-0 before:transition-all before:duration-300 before:ease-[cubic-bezier(0.4,0,0.2,1)]",
-        "before:origin-center md:before:bottom-0",
-        "px-2 before:z-1 before:h-0 before:scale-x-100 before:mix-blend-difference hover:before:h-[1.4em]"
+        "after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:h-0 after:w-full after:bg-[#1A1A1A] after:content-['']",
+        "after:transition-all after:duration-300 after:ease-[cubic-bezier(0.4,0,0.2,1)]",
+        "px-2 hover:after:h-[1.4em]"
       )}
     >
-      {children}
+      <span className="relative z-10 transition-colors duration-150 delay-100 group-hover:text-[#FDECC8]">{children}</span>
     </a>
   )
 }
