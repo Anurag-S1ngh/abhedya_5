@@ -1,8 +1,9 @@
 "use client"
 
+import Countdown from "@/components/ui/countdown"
 import Navbar from "@/components/ui/navbar"
 import { ArrowRight, Check, X } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
 import { parseMarkdown } from "./parseMarkdown"
 
@@ -34,8 +35,22 @@ const questions = [
 ]
 
 export default function GamePage() {
+  const [startTime, setStartTime] = useState<Date | null>(null)
+  const [gameStarted, setGameStarted] = useState(false)
   const [current, setCurrent] = useState(0)
   const [answer, setAnswer] = useState("")
+
+  // Fetch game start time from server
+  useEffect(() => {
+    fetch("/api/game-start")
+      .then((r) => r.json())
+      .then(({ startTime }) => {
+        const t = new Date(startTime)
+        setStartTime(t)
+        if (t <= new Date()) setGameStarted(true)
+      })
+      .catch(() => toast.error("Failed to fetch game start time."))
+  }, [])
 
   const q = questions[current]
   const total = questions.length
@@ -44,6 +59,8 @@ export default function GamePage() {
     setCurrent(next)
     setAnswer("")
   }
+
+  const handleComplete = useCallback(() => setGameStarted(true), [])
 
   function handleSubmit() {
     if (!answer.trim()) {
@@ -68,6 +85,20 @@ export default function GamePage() {
     window.addEventListener("keydown", handler)
     return () => window.removeEventListener("keydown", handler)
   }, [answer, current])
+
+  // Loading state
+  if (!startTime) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#FDECC8]">
+        <span className="text-[#FF7500]/60 text-sm">Loading…</span>
+      </div>
+    )
+  }
+
+  // Countdown state
+  if (!gameStarted) {
+    return <Countdown target={startTime} onComplete={handleComplete} />
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-[#FDECC8] text-[#1A1A1A]">
