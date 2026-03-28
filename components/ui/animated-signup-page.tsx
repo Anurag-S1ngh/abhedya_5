@@ -745,7 +745,7 @@ function LoginPage() {
           <div className="mt-8 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
             <a
-              href="/signin"
+              href="/otp"
               className="font-medium text-foreground hover:underline"
             >
               Sign In
