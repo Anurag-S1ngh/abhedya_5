@@ -2,47 +2,31 @@
 
 import Countdown from "@/components/ui/countdown"
 import Navbar from "@/components/ui/navbar"
-import { ArrowRight, Check, X } from "lucide-react"
+import { ArrowRight, X } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
+import {
+  getApiErrorMessage,
+  getCurrentQuestion,
+  submitAnswer,
+  type QuestionResponse,
+  withBasePath,
+} from "@/lib/api"
 import { parseMarkdown } from "./parseMarkdown"
-
-// ── Sample questions ──────────────────────────────────────────────────────────
-const questions = [
-  {
-    id: 1,
-    text: "What does **HTTP** stand for? Explain in your own words.",
-    media: null,
-  },
-  {
-    id: 2,
-    text: "Listen to the audio clip and describe what you hear.\n\n*Tip: focus on tone and pacing.*",
-    media: { type: "audio" as const, src: "/sample.mp3" },
-  },
-  {
-    id: 3,
-    text: "Look at the image below and answer:\n\n**What design principle is being demonstrated?**",
-    media: {
-      type: "image" as const,
-      src: "https://placehold.co/800x400/FF7500/ffffff?text=Question+Image",
-    },
-  },
-  {
-    id: 4,
-    text: "Watch the video and summarise the key points in `3 bullet points`.",
-    media: { type: "video" as const, src: "/sample.mp4" },
-  },
-]
 
 export default function GamePage() {
   const [startTime, setStartTime] = useState<Date | null>(null)
   const [gameStarted, setGameStarted] = useState(false)
-  const [current, setCurrent] = useState(0)
+  const [currentQuestion, setCurrentQuestion] =
+    useState<QuestionResponse | null>(null)
+  const [isQuestionLoading, setIsQuestionLoading] = useState(false)
   const [answer, setAnswer] = useState("")
+  const router = useRouter()
 
   // Fetch game start time from server
   useEffect(() => {
-    fetch("/api/game-start")
+    fetch(withBasePath("/api/game-start"))
       .then((r) => r.json())
       .then(({ startTime }) => {
         const t = new Date(startTime)
@@ -52,29 +36,56 @@ export default function GamePage() {
       .catch(() => toast.error("Failed to fetch game start time."))
   }, [])
 
-  const q = questions[current]
-  const total = questions.length
+  const loadQuestion = useCallback(async () => {
+    setIsQuestionLoading(true)
 
-  function go(next: number) {
-    setCurrent(next)
-    setAnswer("")
-  }
+    try {
+      const response = await getCurrentQuestion()
+      setCurrentQuestion(response)
+    } catch (error) {
+      const message = getApiErrorMessage(error, "Failed to load your question.")
+      toast.error(message)
+
+      if (message.toLowerCase().includes("unauthorized")) {
+        router.push("/signin")
+      }
+    } finally {
+      setIsQuestionLoading(false)
+    }
+  }, [router])
 
   const handleComplete = useCallback(() => setGameStarted(true), [])
 
-  function handleSubmit() {
+  useEffect(() => {
+    if (!gameStarted) {
+      return
+    }
+
+    loadQuestion()
+  }, [gameStarted, loadQuestion])
+
+  async function handleSubmit() {
     if (!answer.trim()) {
       toast.error("Please enter an answer before submitting.")
       return
     }
-    // TODO: wire to backend — simulate correct/wrong for now
-    const isCorrect = Math.random() > 0.5
-    if (isCorrect) {
-      toast.success("Correct! Well done.")
-    } else {
-      toast.error("Wrong answer. Try again!")
+
+    if (!currentQuestion) {
+      toast.error("Question not loaded yet.")
+      return
     }
-    if (current < total - 1) go(current + 1)
+
+    try {
+      await submitAnswer({
+        answer: answer.trim(),
+        question_number: currentQuestion.questionNumber,
+      })
+      toast.success("Correct! Loading next question.")
+      setAnswer("")
+      await loadQuestion()
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Wrong answer. Try again!"))
+    }
   }
 
   // keyboard shortcut: Ctrl+Enter to submit
@@ -84,13 +95,13 @@ export default function GamePage() {
     }
     window.addEventListener("keydown", handler)
     return () => window.removeEventListener("keydown", handler)
-  }, [answer, current])
+  }, [answer, currentQuestion])
 
   // Loading state
   if (!startTime) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#FDECC8]">
-        <span className="text-[#FF7500]/60 text-sm">Loading…</span>
+        <span className="text-sm text-[#FF7500]/60">Loading…</span>
       </div>
     )
   }
@@ -98,6 +109,24 @@ export default function GamePage() {
   // Countdown state
   if (!gameStarted) {
     return <Countdown target={startTime} onComplete={handleComplete} />
+  }
+
+  if (isQuestionLoading && !currentQuestion) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#FDECC8]">
+        <span className="text-sm text-[#FF7500]/60">Loading question...</span>
+      </div>
+    )
+  }
+
+  if (!currentQuestion) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#FDECC8]">
+        <span className="text-sm text-[#FF7500]/60">
+          Unable to load your current question.
+        </span>
+      </div>
+    )
   }
 
   return (
@@ -108,7 +137,7 @@ export default function GamePage() {
         {/* Question counter */}
         <div className="mb-8 flex items-center justify-between sm:mb-12">
           <h2 className="text-2xl font-black tracking-tight text-[#FF7500] uppercase sm:text-4xl md:text-5xl">
-            Question {current + 1}
+            Question {currentQuestion.questionNumber}
           </h2>
         </div>
 
@@ -117,29 +146,10 @@ export default function GamePage() {
           {/* Question text */}
           <div
             className="prose max-w-none text-base leading-relaxed text-[#1A1A1A] sm:text-lg md:text-xl"
-            dangerouslySetInnerHTML={{ __html: parseMarkdown(q.text) }}
+            dangerouslySetInnerHTML={{
+              __html: parseMarkdown(currentQuestion.question),
+            }}
           />
-
-          {/* Media */}
-          {q.media?.type === "image" && (
-            <img
-              src={q.media.src}
-              alt="Question media"
-              className="w-full rounded-lg object-cover"
-              style={{ maxHeight: 360 }}
-            />
-          )}
-          {q.media?.type === "video" && (
-            <video
-              src={q.media.src}
-              controls
-              className="w-full rounded-lg"
-              style={{ maxHeight: 360 }}
-            />
-          )}
-          {q.media?.type === "audio" && (
-            <audio src={q.media.src} controls className="w-full rounded-lg" />
-          )}
 
           {/* Answer input */}
           <input
@@ -155,14 +165,10 @@ export default function GamePage() {
             <button
               onClick={handleSubmit}
               disabled={!answer.trim()}
-              title={current < total - 1 ? "Submit & Next" : "Submit"}
+              title="Submit answer"
               className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#FF7500] text-[#FDECC8] transition hover:bg-[#e86a00] disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {current < total - 1 ? (
-                <ArrowRight size={18} />
-              ) : (
-                <Check size={18} />
-              )}
+              <ArrowRight size={18} />
             </button>
             <button
               onClick={() => setAnswer("")}

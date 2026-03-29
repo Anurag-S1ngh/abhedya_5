@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { getApiErrorMessage, signup } from "@/lib/api"
 import { Eye, EyeOff, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
@@ -173,6 +174,7 @@ const EyeBall = ({
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
+  const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -306,19 +308,23 @@ function LoginPage() {
     setError("")
     setIsLoading(true)
 
-    // Simulate API delay (quick)
-    await new Promise((resolve) => setTimeout(resolve, 300))
-
-    // Mock authentication - validate against dummy credentials
-    if (email === "erik@gmail.com" && password === "1234") {
-      toast.success("Account created! Welcome aboard.")
-      router.push("/game")
-    } else {
-      setError("Invalid email or password. Please try again.")
-      toast.error("Sign up failed. Check your credentials.")
+    try {
+      const response = await signup({ username, email, password })
+      window.sessionStorage.setItem("pendingVerificationEmail", email)
+      toast.success(
+        response.message || "Account created. Please verify your email."
+      )
+      router.push(`/otp?email=${encodeURIComponent(email)}`)
+    } catch (error) {
+      const message = getApiErrorMessage(
+        error,
+        "Sign up failed. Please try again."
+      )
+      setError(message)
+      toast.error(message)
+    } finally {
+      setIsLoading(false)
     }
-
-    setIsLoading(false)
   }
 
   return (
@@ -680,6 +686,24 @@ function LoginPage() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
+              <Label htmlFor="username" className="text-sm font-medium">
+                Username
+              </Label>
+              <Input
+                id="username"
+                type="text"
+                placeholder="choose a username"
+                value={username}
+                autoComplete="off"
+                onChange={(e) => setUsername(e.target.value)}
+                onFocus={() => setIsTyping(true)}
+                onBlur={() => setIsTyping(false)}
+                required
+                className="h-12 border-border/60 bg-background focus:border-primary"
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
                 Email
               </Label>
@@ -743,12 +767,12 @@ function LoginPage() {
 
           {/* Sign Up Link */}
           <div className="mt-8 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <a
-              href="/otp"
-              className="font-medium text-foreground hover:underline"
+              href="/signin"
+              className="font-medium text-foreground underline-offset-4 hover:underline"
             >
-              Sign In
+              Log in
             </a>
           </div>
         </div>

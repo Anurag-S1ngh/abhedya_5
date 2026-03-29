@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { getApiErrorMessage, login } from "@/lib/api"
 import { Eye, EyeOff, Mail, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
@@ -173,7 +174,7 @@ const EyeBall = ({
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -306,19 +307,20 @@ function LoginPage() {
     setError("")
     setIsLoading(true)
 
-    // Simulate API delay (quick)
-    await new Promise((resolve) => setTimeout(resolve, 300))
-
-    // Mock authentication - validate against dummy credentials
-    if (email === "erik@gmail.com" && password === "1234") {
-      toast.success("Welcome back! Redirecting...")
-      router.push("/")
-    } else {
-      setError("Invalid email or password. Please try again.")
-      toast.error("Sign in failed. Check your credentials.")
+    try {
+      const response = await login({ username, password })
+      toast.success(response.message || "Welcome back! Redirecting...")
+      router.push("/game")
+    } catch (error) {
+      const message = getApiErrorMessage(
+        error,
+        "Sign in failed. Check your credentials."
+      )
+      setError(message)
+      toast.error(message)
+    } finally {
+      setIsLoading(false)
     }
-
-    setIsLoading(false)
   }
 
   return (
@@ -701,16 +703,16 @@ function LoginPage() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email
+              <Label htmlFor="username" className="text-sm font-medium">
+                Username
               </Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="2XBCSXXX@nith.ac.in"
-                value={email}
+                id="username"
+                type="text"
+                placeholder="your username"
+                value={username}
                 autoComplete="off"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
                 onFocus={() => setIsTyping(true)}
                 onBlur={() => setIsTyping(false)}
                 required
