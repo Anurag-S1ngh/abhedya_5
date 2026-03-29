@@ -47,7 +47,7 @@ export default function GamePage() {
       toast.error(message)
 
       if (message.toLowerCase().includes("unauthorized")) {
-        router.push("/signin")
+        router.push(withBasePath("/signin"))
       }
     } finally {
       setIsQuestionLoading(false)

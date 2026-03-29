@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getApiErrorMessage, signup } from "@/lib/api"
+import { getApiErrorMessage, signup, withBasePath } from "@/lib/api"
 import { Eye, EyeOff, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
@@ -314,7 +314,7 @@ function LoginPage() {
       toast.success(
         response.message || "Account created. Please verify your email."
       )
-      router.push(`/otp?email=${encodeURIComponent(email)}`)
+      router.push(withBasePath(`/otp?email=${encodeURIComponent(email)}`))
     } catch (error) {
       const message = getApiErrorMessage(
         error,

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getApiErrorMessage, login } from "@/lib/api"
+import { getApiErrorMessage, login, withBasePath } from "@/lib/api"
 import { Eye, EyeOff, Mail, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
@@ -310,7 +310,7 @@ function LoginPage() {
     try {
       const response = await login({ username, password })
       toast.success(response.message || "Welcome back! Redirecting...")
-      router.push("/game")
+      router.push(withBasePath("/game"))
     } catch (error) {
       const message = getApiErrorMessage(
         error,

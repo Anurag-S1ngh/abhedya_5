@@ -175,18 +175,35 @@ const Link004 = ({
   href: string
   className?: string
 }) => {
+  const classes = cn(
+    "group relative flex items-center overflow-hidden",
+    className,
+    "after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:h-0 after:w-full after:bg-[#1A1A1A] after:content-['']",
+    "after:transition-all after:duration-300 after:ease-[cubic-bezier(0.4,0,0.2,1)]",
+    "px-2 hover:after:h-[1.4em]"
+  )
+
+  const content = (
+    <span className="relative z-10 transition-colors delay-100 duration-150 group-hover:text-[#FDECC8]">
+      {children}
+    </span>
+  )
+
+  if (
+    href.startsWith("/") &&
+    !href.startsWith("//") &&
+    !href.startsWith("/mailto:")
+  ) {
+    return (
+      <Link href={href} className={classes}>
+        {content}
+      </Link>
+    )
+  }
+
   return (
-    <a
-      href={href}
-      className={cn(
-        "group relative flex items-center overflow-hidden",
-        className,
-        "after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:h-0 after:w-full after:bg-[#1A1A1A] after:content-['']",
-        "after:transition-all after:duration-300 after:ease-[cubic-bezier(0.4,0,0.2,1)]",
-        "px-2 hover:after:h-[1.4em]"
-      )}
-    >
-      <span className="relative z-10 transition-colors duration-150 delay-100 group-hover:text-[#FDECC8]">{children}</span>
+    <a href={href} className={classes}>
+      {content}
     </a>
   )
 }
