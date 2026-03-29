@@ -11,9 +11,12 @@ import {
   getCurrentQuestion,
   submitAnswer,
   type QuestionResponse,
-  withBasePath,
 } from "@/lib/api"
 import { parseMarkdown } from "./parseMarkdown"
+
+const GAME_START = new Date(
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-04-01T18:00:00+05:30"
+)
 
 export default function GamePage() {
   const [startTime, setStartTime] = useState<Date | null>(null)
@@ -24,16 +27,11 @@ export default function GamePage() {
   const [answer, setAnswer] = useState("")
   const router = useRouter()
 
-  // Fetch game start time from server
   useEffect(() => {
-    fetch(withBasePath("/api/game-start"))
-      .then((r) => r.json())
-      .then(({ startTime }) => {
-        const t = new Date(startTime)
-        setStartTime(t)
-        if (t <= new Date()) setGameStarted(true)
-      })
-      .catch(() => toast.error("Failed to fetch game start time."))
+    setStartTime(GAME_START)
+    if (GAME_START <= new Date()) {
+      setGameStarted(true)
+    }
   }, [])
 
   const loadQuestion = useCallback(async () => {
@@ -47,7 +45,7 @@ export default function GamePage() {
       toast.error(message)
 
       if (message.toLowerCase().includes("unauthorized")) {
-        router.push(withBasePath("/signin"))
+        router.push("/signin")
       }
     } finally {
       setIsQuestionLoading(false)

@@ -24,7 +24,6 @@ import {
   getApiErrorMessage,
   resendVerificationOTP,
   verifyEmail,
-  withBasePath,
 } from "@/lib/api"
 
 function OTPPageContent() {
@@ -81,7 +80,7 @@ function OTPPageContent() {
       const response = await verifyEmail({ email, otp })
       window.sessionStorage.removeItem("pendingVerificationEmail")
       toast.success(response.message || "Verified successfully.")
-      router.push(withBasePath("/signin"))
+      router.push("/signin")
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Invalid code. Please try again."))
     } finally {

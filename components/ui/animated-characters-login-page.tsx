@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getApiErrorMessage, login, withBasePath } from "@/lib/api"
+import { getApiErrorMessage, login } from "@/lib/api"
 import { Eye, EyeOff, Mail, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
@@ -310,7 +310,7 @@ function LoginPage() {
     try {
       const response = await login({ username, password })
       toast.success(response.message || "Welcome back! Redirecting...")
-      router.push(withBasePath("/game"))
+      router.push("/game")
     } catch (error) {
       const message = getApiErrorMessage(
         error,
@@ -329,10 +329,7 @@ function LoginPage() {
       <div className="relative hidden flex-col justify-between bg-gradient-to-br from-primary/90 via-primary to-primary/80 p-12 text-primary-foreground lg:flex">
         <div className="relative z-20">
           <div className="flex items-center gap-2 text-lg font-semibold">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary-foreground/10 backdrop-blur-sm">
-              <Sparkles className="size-4" />
-            </div>
-            <span>YourBrand</span>
+            <span>Prodyogiki</span>
           </div>
         </div>
 
@@ -749,15 +746,6 @@ function LoginPage() {
             </div>
 
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
-                <Label
-                  htmlFor="remember"
-                  className="cursor-pointer text-sm font-normal"
-                >
-                  Remember me
-                </Label>
-              </div>
               <a
                 href="#"
                 className="text-sm font-medium text-primary hover:underline"
@@ -782,21 +770,9 @@ function LoginPage() {
             </Button>
           </form>
 
-          {/* Social Login */}
-          <div className="mt-6">
-            <Button
-              variant="outline"
-              className="h-12 w-full border-border/60 bg-background hover:bg-accent"
-              type="button"
-            >
-              <Mail className="mr-2 size-5" />
-              Log in with Google
-            </Button>
-          </div>
-
           {/* Sign Up Link */}
           <div className="mt-8 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <a
               href="/signup"
               className="font-medium text-foreground hover:underline"
