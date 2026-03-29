@@ -34,6 +34,7 @@ export default function HomeRipple({
       perturbance={isMobile ? 1.35 : 3}
       interactive={true}
       tiltStrength={isMobile ? 2 : 10}
+      grainStrength={0.1}
       textConfig={{
         lines: ["ABHEDYA"],
         fontSize,

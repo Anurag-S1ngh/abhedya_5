@@ -31,6 +31,8 @@ interface WaterRippleProps {
   rainIntensity?: number
   // Shininess of ripple specular highlight: 0 = none, 1 = default, higher = more shine
   shininess?: number
+  // Film grain strength: 0 = off, default 0.3
+  grainStrength?: number
   // Number of rain drops per interval tick (default 1)
   rainDrops?: number
   // Tilt strength on mouse move (0 = off, default 8)
@@ -154,6 +156,7 @@ export default function WaterRipple({
   backgroundColor = "#1a1a2e",
   rainIntensity = 1,
   shininess = 1,
+  grainStrength = 0.3,
   rainDrops = 1,
   tiltStrength = 8,
 }: WaterRippleProps) {
@@ -417,6 +420,7 @@ export default function WaterRipple({
       uniform vec2 u_mouse;
       uniform vec2 textureSize;
       uniform float u_shininess;
+      uniform float u_grain;
       varying vec2 ripplesCoord;
       varying vec2 backgroundCoord;
       const float PI = 3.141592653589793;
@@ -426,7 +430,7 @@ export default function WaterRipple({
       }
       vec4 addFilmGrain(vec4 color, vec2 uv) {
         float noise = rand(uv + time * 0.1) * 0.20 - 0.075;
-        return vec4(color.rgb + noise * 0.60, color.a);
+        return vec4(color.rgb + noise * u_grain, color.a);
       }
       void main() {
         float height = texture2D(samplerRipples, ripplesCoord).r;
@@ -469,6 +473,7 @@ export default function WaterRipple({
     gl.useProgram(s.renderProgram.id)
     gl.uniform2fv(s.renderProgram.locations["delta"], s.textureDelta)
     gl.uniform1f(s.renderProgram.locations["u_shininess"], shininess)
+    gl.uniform1f(s.renderProgram.locations["u_grain"], grainStrength)
 
     // Background texture
     s.backgroundTexture = gl.createTexture()!

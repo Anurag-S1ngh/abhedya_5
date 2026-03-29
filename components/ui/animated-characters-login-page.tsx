@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getApiErrorMessage, login } from "@/lib/api"
-import { Eye, EyeOff, Sparkles } from "lucide-react"
+import { Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
@@ -328,9 +328,7 @@ function LoginPage() {
       {/* Left Content Section */}
       <div className="relative hidden flex-col justify-between bg-gradient-to-br from-primary/90 via-primary to-primary/80 p-12 text-primary-foreground lg:flex">
         <div className="relative z-20">
-          <div className="flex items-center gap-2 text-lg font-semibold">
-            <span>Prodyogiki</span>
-          </div>
+          <span className="text-lg font-black tracking-tight uppercase">prodyogiki</span>
         </div>
 
         <div className="relative z-20 flex h-[500px] items-end justify-center">
@@ -649,7 +647,6 @@ function LoginPage() {
           </div>
         </div>
 
-
         {/* Decorative elements */}
         <div className="bg-grid-white/[0.05] absolute inset-0 bg-[size:20px_20px]" />
         <div className="absolute top-1/4 right-1/4 size-64 rounded-full bg-primary-foreground/10 blur-3xl" />
@@ -660,11 +657,10 @@ function LoginPage() {
       <div className="flex items-center justify-center bg-background p-8">
         <div className="w-full max-w-[420px]">
           {/* Mobile Logo */}
-          <div className="mb-12 flex items-center justify-center gap-2 text-lg font-semibold lg:hidden">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10">
-              <Sparkles className="size-4 text-primary" />
-            </div>
-            <span>YourBrand</span>
+          <div className="mb-12 flex items-center justify-center lg:hidden">
+            <span className="text-lg font-black tracking-tight uppercase">
+              prodyogiki
+            </span>
           </div>
 
           {/* Header */}

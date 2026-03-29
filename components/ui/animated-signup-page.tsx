@@ -667,11 +667,10 @@ function LoginPage() {
       <div className="flex items-center justify-center bg-background p-8">
         <div className="w-full max-w-[420px]">
           {/* Mobile Logo */}
-          <div className="mb-12 flex items-center justify-center gap-2 text-lg font-semibold lg:hidden">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10">
-              <Sparkles className="size-4 text-primary" />
-            </div>
-            <span>YourBrand</span>
+          <div className="mb-12 flex items-center justify-center lg:hidden">
+            <span className="text-lg font-black tracking-tight uppercase">
+              prodyogiki
+            </span>
           </div>
 
           {/* Header */}

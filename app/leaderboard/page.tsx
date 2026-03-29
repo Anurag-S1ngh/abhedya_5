@@ -1,12 +1,14 @@
 "use client"
 
+import Countdown from "@/components/ui/countdown"
 import Navbar from "@/components/ui/navbar"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
   getApiErrorMessage,
   getLeaderboard,
   type LeaderboardUser,
 } from "@/lib/api"
+import { toast } from "sonner"
 
 function maxWidth(rank: number) {
   return 100 - (rank - 1) * 3
@@ -20,14 +22,42 @@ function barColor(rank: number) {
 }
 
 export default function LeaderboardPage() {
+  const [startTime, setStartTime] = useState<Date | null>(null)
+  const [gameStarted, setGameStarted] = useState(false)
   const [animated, setAnimated] = useState(false)
   const [players, setPlayers] = useState<LeaderboardUser[]>([])
   const [error, setError] = useState("")
 
   useEffect(() => {
+    fetch("/api/game-start")
+      .then((r) => r.json())
+      .then(({ startTime }) => {
+        const t = new Date(startTime)
+        setStartTime(t)
+        if (t <= new Date()) setGameStarted(true)
+      })
+      .catch(() => toast.error("Failed to fetch game start time."))
+  }, [])
+
+  const handleComplete = useCallback(() => setGameStarted(true), [])
+
+  useEffect(() => {
+    if (!gameStarted) return
     const t = setTimeout(() => setAnimated(true), 100)
     return () => clearTimeout(t)
-  }, [])
+  }, [gameStarted])
+
+  if (!startTime) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#FDECC8]">
+        <span className="text-sm text-[#FF7500]/60">Loading…</span>
+      </div>
+    )
+  }
+
+  if (!gameStarted) {
+    return <Countdown target={startTime} onComplete={handleComplete} />
+  }
 
   useEffect(() => {
     async function loadLeaderboard() {
