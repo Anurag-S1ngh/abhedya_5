@@ -3,11 +3,21 @@
 import WaterRipple from "@/components/ui/water-ripple"
 import { useEffect, useState } from "react"
 
-export default function HomeRipple({ children }: { children: React.ReactNode }) {
+export default function HomeRipple({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const [fontSize, setFontSize] = useState(220)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const update = () => setFontSize(window.innerWidth < 640 ? 56 : 220)
+    const update = () => {
+      const mobile = window.innerWidth < 640
+      setIsMobile(mobile)
+      setFontSize(mobile ? 56 : 220)
+    }
+
     update()
     window.addEventListener("resize", update)
     return () => window.removeEventListener("resize", update)
@@ -15,15 +25,15 @@ export default function HomeRipple({ children }: { children: React.ReactNode }) 
 
   return (
     <WaterRipple
-      shininess={2}
-      rainDrops={0.01}
-      rainIntensity={0.1}
+      shininess={isMobile ? 1.2 : 2}
+      rainDrops={isMobile ? 0.003 : 0.01}
+      rainIntensity={isMobile ? 0.035 : 0.1}
       className="h-screen w-full"
-      resolution={256}
-      dropRadius={55}
-      perturbance={3}
+      resolution={isMobile ? 192 : 256}
+      dropRadius={isMobile ? 38 : 55}
+      perturbance={isMobile ? 1.35 : 3}
       interactive={true}
-      tiltStrength={10}
+      tiltStrength={isMobile ? 2 : 10}
       textConfig={{
         lines: ["ABHEDYA"],
         fontSize,

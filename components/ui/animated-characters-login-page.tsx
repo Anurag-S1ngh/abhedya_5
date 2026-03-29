@@ -1,11 +1,10 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getApiErrorMessage, login } from "@/lib/api"
-import { Eye, EyeOff, Mail, Sparkles } from "lucide-react"
+import { Eye, EyeOff, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
@@ -650,26 +649,6 @@ function LoginPage() {
           </div>
         </div>
 
-        <div className="relative z-20 flex items-center gap-8 text-sm text-primary-foreground/60">
-          <a
-            href="#"
-            className="transition-colors hover:text-primary-foreground"
-          >
-            Privacy Policy
-          </a>
-          <a
-            href="#"
-            className="transition-colors hover:text-primary-foreground"
-          >
-            Terms of Service
-          </a>
-          <a
-            href="#"
-            className="transition-colors hover:text-primary-foreground"
-          >
-            Contact
-          </a>
-        </div>
 
         {/* Decorative elements */}
         <div className="bg-grid-white/[0.05] absolute inset-0 bg-[size:20px_20px]" />
