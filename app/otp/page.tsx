@@ -1,7 +1,7 @@
 "use client"
 
 import { RefreshCwIcon } from "lucide-react"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -26,7 +26,7 @@ import {
   verifyEmail,
 } from "@/lib/api"
 
-export default function OTPPage() {
+function OTPPageContent() {
   const [otp, setOtp] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isResending, setIsResending] = useState(false)
@@ -186,5 +186,19 @@ export default function OTPPage() {
         </CardFooter>
       </Card>
     </div>
+  )
+}
+
+export default function OTPPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-[#FDECC8] px-4 text-sm text-[#FF7500]/60">
+          Loading verification page...
+        </div>
+      }
+    >
+      <OTPPageContent />
+    </Suspense>
   )
 }
