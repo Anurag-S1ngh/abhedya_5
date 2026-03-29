@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getApiErrorMessage, login } from "@/lib/api"
 import { Eye, EyeOff, Mail, Sparkles } from "lucide-react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -746,12 +747,12 @@ function LoginPage() {
             </div>
 
             <div className="flex items-center justify-between">
-              <a
-                href="#"
+              <Link
+                href="/forgot-password"
                 className="text-sm font-medium text-primary hover:underline"
               >
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             {error && (
@@ -773,12 +774,12 @@ function LoginPage() {
           {/* Sign Up Link */}
           <div className="mt-8 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <a
+            <Link
               href="/signup"
               className="font-medium text-foreground hover:underline"
             >
               Sign Up
-            </a>
+            </Link>
           </div>
         </div>
       </div>

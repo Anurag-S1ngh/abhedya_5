@@ -31,7 +31,6 @@ export default function Page() {
               Decrypt ancient signs to expose hidden layers inside immersive
               puzzle driven hunt worlds
             </p>
-            {/* Hidden on mobile — shown in navbar mobile menu instead */}
             <div className="hidden items-center gap-4 sm:flex sm:gap-6">
               <InteractiveHoverButton className="border-[#FDECC8] bg-transparent text-sm text-[#FDECC8]">
                 Log Out

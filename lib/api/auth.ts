@@ -20,6 +20,16 @@ export interface ResendVerificationOTPPayload {
   email: string
 }
 
+export interface ForgotPasswordPayload {
+  email: string
+}
+
+export interface ResetPasswordPayload {
+  email: string
+  otp: string
+  password: string
+}
+
 export async function signup(payload: SignupPayload) {
   const { data } = await apiClient.post<{ message: string }>("/signup", payload)
   return data
@@ -43,6 +53,22 @@ export async function resendVerificationOTP(
 ) {
   const { data } = await apiClient.post<{ message: string }>(
     "/resend-verification-otp",
+    payload
+  )
+  return data
+}
+
+export async function forgotPassword(payload: ForgotPasswordPayload) {
+  const { data } = await apiClient.post<{ message: string }>(
+    "/forgot-password",
+    payload
+  )
+  return data
+}
+
+export async function resetPassword(payload: ResetPasswordPayload) {
+  const { data } = await apiClient.post<{ message: string }>(
+    "/reset-password",
     payload
   )
   return data

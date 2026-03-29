@@ -17,7 +17,7 @@ export default function HomeRipple({ children }: { children: React.ReactNode }) 
     <WaterRipple
       shininess={2}
       rainDrops={0.01}
-      rainIntensity={0.2}
+      rainIntensity={0.1}
       className="h-screen w-full"
       resolution={256}
       dropRadius={55}

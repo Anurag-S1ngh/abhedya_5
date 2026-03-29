@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getApiErrorMessage, signup } from "@/lib/api"
 import { Eye, EyeOff, Sparkles } from "lucide-react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
@@ -768,12 +769,12 @@ function LoginPage() {
           {/* Sign Up Link */}
           <div className="mt-8 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <a
+            <Link
               href="/signin"
               className="font-medium text-foreground underline-offset-4 hover:underline"
             >
               Log in
-            </a>
+            </Link>
           </div>
         </div>
       </div>
