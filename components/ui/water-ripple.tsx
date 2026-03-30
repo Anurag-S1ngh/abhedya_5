@@ -52,7 +52,12 @@ function loadConfig(gl: WebGLRenderingContext) {
     if (ext) extensions[name] = ext
   })
 
-  if (!extensions["OES_texture_float"]) return null
+  if (
+    !extensions["OES_texture_float"] &&
+    !extensions["OES_texture_half_float"]
+  ) {
+    return null
+  }
 
   function createConfig(
     type: string,
@@ -281,6 +286,37 @@ export default function WaterRipple({
     s.config = config
     s.destroyed = false
     s.startTime = Date.now() / 1000
+    const isCoarsePointer =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(pointer: coarse)").matches
+    const effectiveRainIntensity =
+      rainIntensity > 0
+        ? isCoarsePointer
+          ? Math.max(rainIntensity, 0.2)
+          : rainIntensity
+        : 0
+    const effectiveRainDrops = Math.max(0, rainDrops)
+    const idleRainDelay = isCoarsePointer ? 250 : 1000
+
+    const spawnRainDrops = () => {
+      if (!canvasRef.current) return
+      const liveCanvas = canvasRef.current
+      let dropsThisTick = Math.floor(effectiveRainDrops)
+      if (Math.random() < effectiveRainDrops - dropsThisTick) {
+        dropsThisTick += 1
+      }
+      for (let i = 0; i < dropsThisTick; i++) {
+        const x = Math.random() * liveCanvas.width
+        const y = Math.random() * liveCanvas.height
+        dropAt(
+          x,
+          y,
+          dropRadius * 1.2 * effectiveRainIntensity,
+          0.06 * effectiveRainIntensity
+        )
+      }
+    }
 
     // Load extensions
     config.extensions.forEach((name) => gl.getExtension(name))
@@ -600,23 +636,20 @@ export default function WaterRipple({
       s.bufferReadIndex = 1 - s.bufferReadIndex
 
       // Auto-rain when idle
-      if (!s.isRaining && Date.now() - s.lastMouseMove > 1000) {
+      if (
+        !s.isRaining &&
+        effectiveRainIntensity > 0 &&
+        effectiveRainDrops > 0 &&
+        Date.now() - s.lastMouseMove > idleRainDelay
+      ) {
         s.isRaining = true
+        spawnRainDrops()
         s.rainInterval = setInterval(
           () => {
             if (s.destroyed) return
-            for (let i = 0; i < rainDrops; i++) {
-              const x = Math.random() * canvas.width
-              const y = Math.random() * canvas.height
-              dropAt(
-                x,
-                y,
-                dropRadius * 1.2 * rainIntensity,
-                0.06 * rainIntensity
-              )
-            }
+            spawnRainDrops()
           },
-          Math.max(16, 40 / rainIntensity)
+          Math.max(20, 70 / effectiveRainIntensity)
         )
       }
 
@@ -676,6 +709,7 @@ export default function WaterRipple({
       canvas.height = container.clientHeight
     }
     window.addEventListener("resize", handleResize)
+    handleResize()
 
     return () => {
       s.destroyed = true
@@ -695,6 +729,10 @@ export default function WaterRipple({
     textConfig,
     textColor,
     backgroundColor,
+    rainIntensity,
+    rainDrops,
+    shininess,
+    grainStrength,
   ])
 
   // Convert pointer position (relative to container) to canvas pixel coords.
@@ -732,8 +770,8 @@ export default function WaterRipple({
       // tilt target: map 0-1 → -strength..+strength degrees
       if (tiltStrength > 0) {
         const t = tiltRef.current
-        t.tx = (ny - 0.5) * tiltStrength * 2   // rotateX: top = positive tilt
-        t.ty = (nx - 0.5) * -tiltStrength * 2  // rotateY: right = negative tilt
+        t.tx = (ny - 0.5) * tiltStrength * 2 // rotateX: top = positive tilt
+        t.ty = (nx - 0.5) * -tiltStrength * 2 // rotateY: right = negative tilt
 
         cancelAnimationFrame(t.raf)
         const spring = () => {
@@ -788,10 +826,25 @@ export default function WaterRipple({
 
   const handleTouchMove = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
+      const s = stateRef.current
       const rect = e.currentTarget.getBoundingClientRect()
+      s.lastMouseMove = Date.now()
+      if (s.isRaining) {
+        s.isRaining = false
+        if (s.rainInterval) {
+          clearInterval(s.rainInterval)
+          s.rainInterval = null
+        }
+      }
       Array.from(e.changedTouches).forEach((touch) => {
-        const { x, y } = pointerToCanvas(touch.clientX, touch.clientY, rect)
-        dropAt(x, y, dropRadius, 0.01)
+        const { x, y, nx, ny } = pointerToCanvas(
+          touch.clientX,
+          touch.clientY,
+          rect
+        )
+        s.mousePosition[0] = nx
+        s.mousePosition[1] = 1.0 - ny
+        dropAt(x, y, dropRadius, 0.03)
       })
     },
     [dropAt, dropRadius, pointerToCanvas]
