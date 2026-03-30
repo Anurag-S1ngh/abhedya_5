@@ -18,9 +18,14 @@ export async function getCurrentQuestion() {
 }
 
 export async function submitAnswer(payload: SubmitAnswerPayload) {
+  const normalizedPayload = {
+    ...payload,
+    answer: payload.answer.toLowerCase().replace(/\s+/g, ""),
+  }
+
   const { data } = await apiClient.post<{ message: string }>(
     "/user/submit-answer",
-    payload
+    normalizedPayload
   )
   return data
 }

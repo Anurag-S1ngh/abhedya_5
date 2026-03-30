@@ -16,7 +16,7 @@ import {
 import { parseMarkdown } from "./parseMarkdown"
 
 const GAME_START = new Date(
-  process.env.NEXT_PUBLIC_GAME_START ?? "2026-03-01T22:00:00+05:30"
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-04-01T22:00:00+05:30"
 )
 
 export default function GamePage() {
@@ -109,7 +109,7 @@ export default function GamePage() {
 
     try {
       await submitAnswer({
-        answer: answer.trim().toLowerCase(),
+        answer,
         question_number: currentQuestion.questionNumber,
       })
       toast.success("Correct! Loading next question.")
