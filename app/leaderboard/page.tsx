@@ -21,7 +21,7 @@ function barColor(rank: number) {
 }
 
 const GAME_START = new Date(
-  process.env.NEXT_PUBLIC_GAME_START ?? "2026-03-01T18:00:00+05:30"
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-04-01T12:00:00+05:30"
 )
 
 export default function LeaderboardPage() {
