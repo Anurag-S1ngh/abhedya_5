@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getApiErrorMessage, login } from "@/lib/api"
+import { getApiErrorMessage, login, withBasePath } from "@/lib/api"
 import { Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
@@ -311,7 +311,7 @@ function LoginPage() {
         window.localStorage.setItem("authToken", response.token)
       }
       toast.success(response.message || "Welcome back! Redirecting...")
-      window.location.assign("/game")
+      window.location.assign(withBasePath("/game"))
     } catch (error) {
       const message = getApiErrorMessage(
         error,

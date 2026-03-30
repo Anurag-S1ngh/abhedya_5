@@ -16,7 +16,7 @@ import {
 import { parseMarkdown } from "./parseMarkdown"
 
 const GAME_START = new Date(
-  process.env.NEXT_PUBLIC_GAME_START ?? "2026-04-01T22:00:00+05:30"
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-03-01T22:00:00+05:30"
 )
 
 export default function GamePage() {
@@ -109,7 +109,7 @@ export default function GamePage() {
 
     try {
       await submitAnswer({
-        answer: answer.trim(),
+        answer: answer.trim().toLowerCase(),
         question_number: currentQuestion.questionNumber,
       })
       toast.success("Correct! Loading next question.")
@@ -206,6 +206,14 @@ export default function GamePage() {
               __html: parseMarkdown(currentQuestion.question),
             }}
           />
+
+          {currentQuestion.imgSrc ? (
+            <img
+              src={currentQuestion.imgSrc}
+              alt={`Question ${currentQuestion.questionNumber}`}
+              className="max-h-[420px] w-full rounded-lg border border-[#1A1A1A]/10 object-contain"
+            />
+          ) : null}
 
           {/* Answer input */}
           <input

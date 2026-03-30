@@ -3,6 +3,7 @@ import { apiClient } from "./client"
 export interface QuestionResponse {
   questionNumber: number
   question: string
+  imgSrc?: string
   message: string
 }
 
