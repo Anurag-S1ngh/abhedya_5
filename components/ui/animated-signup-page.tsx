@@ -4,6 +4,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getApiErrorMessage, signup } from "@/lib/api"
+import {
+  isValidNithEmail,
+  NITH_EMAIL_ERROR,
+  normalizeNithEmail,
+} from "@/lib/nith-email"
 import { Eye, EyeOff, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -307,15 +312,28 @@ function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+
+    const normalizedEmail = normalizeNithEmail(email)
+
+    if (!isValidNithEmail(normalizedEmail)) {
+      setError(NITH_EMAIL_ERROR)
+      toast.error(NITH_EMAIL_ERROR)
+      return
+    }
+
     setIsLoading(true)
 
     try {
-      const response = await signup({ username, email, password })
-      window.sessionStorage.setItem("pendingVerificationEmail", email)
+      const response = await signup({
+        username,
+        email: normalizedEmail,
+        password,
+      })
+      window.sessionStorage.setItem("pendingVerificationEmail", normalizedEmail)
       toast.success(
         response.message || "Account created. Please verify your email."
       )
-      router.push(`/otp?email=${encodeURIComponent(email)}`)
+      router.push(`/otp?email=${encodeURIComponent(normalizedEmail)}`)
     } catch (error) {
       const message = getApiErrorMessage(
         error,
@@ -710,10 +728,10 @@ function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="2XBCSXXX@nith.ac.in"
+                placeholder="24bcs108@nith.ac.in"
                 value={email}
                 autoComplete="off"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(normalizeNithEmail(e.target.value))}
                 onFocus={() => setIsTyping(true)}
                 onBlur={() => setIsTyping(false)}
                 required

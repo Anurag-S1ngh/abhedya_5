@@ -25,6 +25,11 @@ import {
   resendVerificationOTP,
   verifyEmail,
 } from "@/lib/api"
+import {
+  isValidNithEmail,
+  NITH_EMAIL_ERROR,
+  normalizeNithEmail,
+} from "@/lib/nith-email"
 
 function OTPPageContent() {
   const [otp, setOtp] = useState("")
@@ -41,7 +46,7 @@ function OTPPageContent() {
       window.sessionStorage.getItem("pendingVerificationEmail") ||
       ""
 
-    setEmail(pendingEmail)
+    setEmail(normalizeNithEmail(pendingEmail))
   }, [searchParams])
 
   useEffect(() => {
@@ -69,15 +74,22 @@ function OTPPageContent() {
       return
     }
 
-    if (!email) {
+    const normalizedEmail = normalizeNithEmail(email)
+
+    if (!normalizedEmail) {
       toast.error("Missing email for verification. Please sign up again.")
+      return
+    }
+
+    if (!isValidNithEmail(normalizedEmail)) {
+      toast.error(NITH_EMAIL_ERROR)
       return
     }
 
     setIsLoading(true)
 
     try {
-      const response = await verifyEmail({ email, otp })
+      const response = await verifyEmail({ email: normalizedEmail, otp })
       window.sessionStorage.removeItem("pendingVerificationEmail")
       toast.success(response.message || "Verified successfully.")
       router.push("/signin")
@@ -89,15 +101,22 @@ function OTPPageContent() {
   }
 
   async function handleResend() {
-    if (!email) {
+    const normalizedEmail = normalizeNithEmail(email)
+
+    if (!normalizedEmail) {
       toast.error("Missing email for verification. Please sign up again.")
+      return
+    }
+
+    if (!isValidNithEmail(normalizedEmail)) {
+      toast.error(NITH_EMAIL_ERROR)
       return
     }
 
     setIsResending(true)
 
     try {
-      const response = await resendVerificationOTP({ email })
+      const response = await resendVerificationOTP({ email: normalizedEmail })
       toast.success(
         response.message || "A new code has been sent to your email."
       )

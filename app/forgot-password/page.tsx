@@ -15,6 +15,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { forgotPassword, getApiErrorMessage, resetPassword } from "@/lib/api"
+import {
+  isValidNithEmail,
+  NITH_EMAIL_ERROR,
+  normalizeNithEmail,
+} from "@/lib/nith-email"
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
@@ -25,15 +30,23 @@ export default function ForgotPasswordPage() {
   const [isResetting, setIsResetting] = useState(false)
 
   async function handleSendOTP() {
-    if (!email.trim()) {
+    const normalizedEmail = normalizeNithEmail(email)
+
+    if (!normalizedEmail) {
       toast.error("Enter your email first.")
+      return
+    }
+
+    if (!isValidNithEmail(normalizedEmail)) {
+      toast.error(NITH_EMAIL_ERROR)
       return
     }
 
     setIsSending(true)
 
     try {
-      const response = await forgotPassword({ email: email.trim() })
+      const response = await forgotPassword({ email: normalizedEmail })
+      setEmail(normalizedEmail)
       setOtpSent(true)
       toast.success(response.message || "Password reset OTP sent.")
     } catch (error) {
@@ -44,8 +57,15 @@ export default function ForgotPasswordPage() {
   }
 
   async function handleResetPassword() {
-    if (!email.trim() || !otp.trim() || !password.trim()) {
+    const normalizedEmail = normalizeNithEmail(email)
+
+    if (!normalizedEmail || !otp.trim() || !password.trim()) {
       toast.error("Fill email, OTP, and new password.")
+      return
+    }
+
+    if (!isValidNithEmail(normalizedEmail)) {
+      toast.error(NITH_EMAIL_ERROR)
       return
     }
 
@@ -53,7 +73,7 @@ export default function ForgotPasswordPage() {
 
     try {
       const response = await resetPassword({
-        email: email.trim(),
+        email: normalizedEmail,
         otp: otp.trim(),
         password,
       })
@@ -86,8 +106,8 @@ export default function ForgotPasswordPage() {
               id="forgot-email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              onChange={(e) => setEmail(normalizeNithEmail(e.target.value))}
+              placeholder="24bcs108@nith.ac.in"
               className="border-[#FF7500]/20 bg-[#FDECC8]"
             />
           </div>
