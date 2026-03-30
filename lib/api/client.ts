@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://127.0.0.1:3000"
+  process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://prody.nith.ac.in/abhedya/api"
 const FRONTEND_BASE_PATH =
   process.env.NEXT_PUBLIC_BASE_PATH ??
   (process.env.NODE_ENV === "production" ? "/abhedya" : "")

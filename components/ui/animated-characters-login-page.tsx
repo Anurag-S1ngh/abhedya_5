@@ -328,7 +328,12 @@ function LoginPage() {
       {/* Left Content Section */}
       <div className="relative hidden flex-col justify-between bg-gradient-to-br from-primary/90 via-primary to-primary/80 p-12 text-primary-foreground lg:flex">
         <div className="relative z-20">
-          <span className="text-lg font-black tracking-tight uppercase">prodyogiki</span>
+          <Link
+            href="/"
+            className="text-lg font-black tracking-tight uppercase"
+          >
+            prodyogiki
+          </Link>
         </div>
 
         <div className="relative z-20 flex h-[500px] items-end justify-center">

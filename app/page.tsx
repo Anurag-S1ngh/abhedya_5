@@ -25,17 +25,12 @@ export default function Page() {
         <Navbar />
 
         {/* Bottom bar */}
-        <div className="fixed right-0 bottom-0 left-0 px-4 py-4 sm:px-6 sm:py-6">
+        <div className="fixed right-0 bottom-0 left-0 px-4 py-5 sm:px-6 sm:py-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <p className="max-w-2xl text-2xl leading-tight font-semibold tracking-tight text-[#FDECC8]/80 sm:text-4xl">
+            <p className="max-w-xl text-xl leading-tight font-semibold tracking-tight text-[#FDECC8]/80 sm:max-w-2xl sm:text-4xl">
               Decrypt ancient signs to expose hidden layers inside immersive
               puzzle driven hunt worlds
             </p>
-            <div className="hidden items-center gap-4 sm:flex sm:gap-6">
-              <InteractiveHoverButton className="border-[#FDECC8] bg-transparent text-sm text-[#FDECC8]">
-                Log Out
-              </InteractiveHoverButton>
-            </div>
           </div>
         </div>
       </HomeRipple>

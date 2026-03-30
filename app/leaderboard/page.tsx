@@ -2,13 +2,12 @@
 
 import Countdown from "@/components/ui/countdown"
 import Navbar from "@/components/ui/navbar"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import {
   getApiErrorMessage,
   getLeaderboard,
   type LeaderboardUser,
 } from "@/lib/api"
-import { toast } from "sonner"
 
 function maxWidth(rank: number) {
   return 100 - (rank - 1) * 3
@@ -21,30 +20,44 @@ function barColor(rank: number) {
   return "#F8D7AD"
 }
 
+const GAME_START = new Date(
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-03-01T18:00:00+05:30"
+)
+
 export default function LeaderboardPage() {
+  const [animated, setAnimated] = useState(false)
   const [startTime, setStartTime] = useState<Date | null>(null)
   const [gameStarted, setGameStarted] = useState(false)
-  const [animated, setAnimated] = useState(false)
   const [players, setPlayers] = useState<LeaderboardUser[]>([])
   const [error, setError] = useState("")
 
   useEffect(() => {
-    fetch("/api/game-start")
-      .then((r) => r.json())
-      .then(({ startTime }) => {
-        const t = new Date(startTime)
-        setStartTime(t)
-        if (t <= new Date()) setGameStarted(true)
-      })
-      .catch(() => toast.error("Failed to fetch game start time."))
-  }, [])
-
-  const handleComplete = useCallback(() => setGameStarted(true), [])
-
-  useEffect(() => {
-    if (!gameStarted) return
     const t = setTimeout(() => setAnimated(true), 100)
     return () => clearTimeout(t)
+  }, [])
+
+  useEffect(() => {
+    setStartTime(GAME_START)
+    if (GAME_START <= new Date()) {
+      setGameStarted(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!gameStarted) {
+      return
+    }
+
+    async function loadLeaderboard() {
+      try {
+        const response = await getLeaderboard()
+        setPlayers(response.users)
+      } catch (error) {
+        setError(getApiErrorMessage(error, "Failed to load leaderboard."))
+      }
+    }
+
+    loadLeaderboard()
   }, [gameStarted])
 
   if (!startTime) {
@@ -56,21 +69,8 @@ export default function LeaderboardPage() {
   }
 
   if (!gameStarted) {
-    return <Countdown target={startTime} onComplete={handleComplete} />
+    return <Countdown target={startTime} onComplete={() => setGameStarted(true)} />
   }
-
-  useEffect(() => {
-    async function loadLeaderboard() {
-      try {
-        const response = await getLeaderboard()
-        setPlayers(response.users)
-      } catch (error) {
-        setError(getApiErrorMessage(error, "Failed to load leaderboard."))
-      }
-    }
-
-    loadLeaderboard()
-  }, [])
 
   const maxScore = players[0]?.score ?? 0
 

@@ -98,11 +98,6 @@ export default function Navbar({ dark = false }: NavbarProps) {
             <Link href="/signin" className="text-sm font-medium opacity-90">
               Log in
             </Link>
-            <Separator
-              className="border-1 border-orange-400/30"
-              orientation="vertical"
-            />
-            <div className="text-sm font-medium opacity-90">Log Out</div>
           </div>
         </div>
       )}

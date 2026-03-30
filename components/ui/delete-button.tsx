@@ -30,7 +30,7 @@ const DeleteButton = () => {
   }
 
   // Change Here
-  const deleteText = "Log Out"
+  const deleteText = "Delete"
   const cancelText = "Cancel"
 
   return (

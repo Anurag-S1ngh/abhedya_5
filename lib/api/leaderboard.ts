@@ -10,18 +10,38 @@ export interface LeaderboardUser {
 
 export interface LeaderboardResponse {
   users: LeaderboardUser[]
-  current_page: number
-  total_pages: number
-  total_users: number
-  limit: number
+  total: number
 }
 
-export async function getLeaderboard(page = 1, limit = 10) {
-  const { data } = await apiClient.get<LeaderboardResponse>(
-    "/user/leaderboard",
-    {
-      params: { page, limit },
-    }
-  )
-  return data
+interface RawLeaderboardUser {
+  id?: number
+  username?: string
+  score?: number
+  last_solved_at?: string | null
+  created_at?: string
+  ID?: number
+  Username?: string
+  Score?: number
+  LastSolvedAt?: string | null
+  CreatedAt?: string
+}
+
+interface RawLeaderboardResponse {
+  users: RawLeaderboardUser[]
+  total?: number
+}
+
+export async function getLeaderboard() {
+  const { data } = await apiClient.get<RawLeaderboardResponse>("/user/leaderboard")
+
+  return {
+    total: data.total ?? data.users.length,
+    users: data.users.map((user) => ({
+      id: user.id ?? user.ID ?? 0,
+      username: user.username ?? user.Username ?? "",
+      score: user.score ?? user.Score ?? 0,
+      last_solved_at: user.last_solved_at ?? user.LastSolvedAt ?? null,
+      created_at: user.created_at ?? user.CreatedAt ?? "",
+    })),
+  } satisfies LeaderboardResponse
 }

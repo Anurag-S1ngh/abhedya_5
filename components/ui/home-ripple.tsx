@@ -13,9 +13,10 @@ export default function HomeRipple({
 
   useEffect(() => {
     const update = () => {
-      const mobile = window.innerWidth < 640
+      const width = window.innerWidth
+      const mobile = width < 640
       setIsMobile(mobile)
-      setFontSize(mobile ? 56 : 220)
+      setFontSize(mobile ? Math.max(34, Math.min(50, width * 0.12)) : 220)
     }
 
     update()
@@ -28,7 +29,7 @@ export default function HomeRipple({
       shininess={isMobile ? 1.2 : 2}
       rainDrops={isMobile ? 0.003 : 0.01}
       rainIntensity={isMobile ? 0.035 : 0.1}
-      className="h-screen w-full"
+      className="min-h-screen w-full"
       resolution={isMobile ? 192 : 256}
       dropRadius={isMobile ? 38 : 55}
       perturbance={isMobile ? 1.35 : 3}
