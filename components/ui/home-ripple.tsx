@@ -16,7 +16,7 @@ export default function HomeRipple({
       const width = window.innerWidth
       const mobile = width < 640
       setIsMobile(mobile)
-      setFontSize(mobile ? Math.max(34, Math.min(50, width * 0.12)) : 220)
+      setFontSize(Math.round(Math.max(34, Math.min(220, width * 0.16))))
     }
 
     update()

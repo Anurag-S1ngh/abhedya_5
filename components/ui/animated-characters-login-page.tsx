@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label"
 import { getApiErrorMessage, login } from "@/lib/api"
 import { Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
@@ -189,7 +188,6 @@ function LoginPage() {
   const blackRef = useRef<HTMLDivElement>(null)
   const yellowRef = useRef<HTMLDivElement>(null)
   const orangeRef = useRef<HTMLDivElement>(null)
-  const router = useRouter()
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -309,8 +307,11 @@ function LoginPage() {
 
     try {
       const response = await login({ username, password })
+      if (response.token) {
+        window.localStorage.setItem("authToken", response.token)
+      }
       toast.success(response.message || "Welcome back! Redirecting...")
-      router.push("/game")
+      window.location.assign("/game")
     } catch (error) {
       const message = getApiErrorMessage(
         error,

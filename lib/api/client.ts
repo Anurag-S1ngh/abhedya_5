@@ -1,14 +1,27 @@
 import axios from "axios"
 
-const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL ?? "https://prody.nith.ac.in/abhedya/api"
 const FRONTEND_BASE_PATH =
   process.env.NEXT_PUBLIC_BASE_PATH ??
   (process.env.NODE_ENV === "production" ? "/abhedya" : "")
+const BACKEND_URL =
+  process.env.NODE_ENV === "production"
+    ? `${FRONTEND_BASE_PATH}/api`
+    : process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://127.0.0.1:3000"
 
 export const apiClient = axios.create({
   baseURL: BACKEND_URL,
   withCredentials: true,
+})
+
+apiClient.interceptors.request.use((config) => {
+  if (typeof window !== "undefined") {
+    const token = window.localStorage.getItem("authToken")
+    if (token) {
+      config.headers.set("Authorization", `Bearer ${token}`)
+    }
+  }
+
+  return config
 })
 
 export function withBasePath(path: string) {

@@ -36,7 +36,10 @@ export async function signup(payload: SignupPayload) {
 }
 
 export async function login(payload: LoginPayload) {
-  const { data } = await apiClient.post<{ message: string }>("/login", payload)
+  const { data } = await apiClient.post<{ message: string; token?: string }>(
+    "/login",
+    payload
+  )
   return data
 }
 

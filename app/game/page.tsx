@@ -3,7 +3,8 @@
 import Countdown from "@/components/ui/countdown"
 import Navbar from "@/components/ui/navbar"
 import { ArrowRight, X } from "lucide-react"
-import { useRouter } from "next/navigation"
+import axios from "axios"
+import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
 import {
@@ -15,17 +16,17 @@ import {
 import { parseMarkdown } from "./parseMarkdown"
 
 const GAME_START = new Date(
-  process.env.NEXT_PUBLIC_GAME_START ?? "2026-04-01T12:00:00+05:30"
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-04-01T22:00:00+05:30"
 )
 
 export default function GamePage() {
   const [startTime, setStartTime] = useState<Date | null>(null)
   const [gameStarted, setGameStarted] = useState(false)
+  const [authRequired, setAuthRequired] = useState(false)
   const [currentQuestion, setCurrentQuestion] =
     useState<QuestionResponse | null>(null)
   const [isQuestionLoading, setIsQuestionLoading] = useState(false)
   const [answer, setAnswer] = useState("")
-  const router = useRouter()
 
   useEffect(() => {
     setStartTime(GAME_START)
@@ -36,21 +37,54 @@ export default function GamePage() {
 
   const loadQuestion = useCallback(async () => {
     setIsQuestionLoading(true)
+    setAuthRequired(false)
 
     try {
       const response = await getCurrentQuestion()
+      setAuthRequired(false)
       setCurrentQuestion(response)
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        await new Promise((resolve) => window.setTimeout(resolve, 300))
+
+        try {
+          const retryResponse = await getCurrentQuestion()
+          setAuthRequired(false)
+          setCurrentQuestion(retryResponse)
+          return
+        } catch (retryError) {
+          if (
+            axios.isAxiosError(retryError) &&
+            retryError.response?.status === 401
+          ) {
+            setCurrentQuestion(null)
+            setAuthRequired(true)
+            return
+          }
+
+          toast.error(
+            getApiErrorMessage(
+              retryError,
+              "Failed to load your question."
+            )
+          )
+          return
+        }
+      }
+
       const message = getApiErrorMessage(error, "Failed to load your question.")
-      toast.error(message)
 
       if (message.toLowerCase().includes("unauthorized")) {
-        router.push("/signin")
+        setCurrentQuestion(null)
+        setAuthRequired(true)
+        return
       }
+
+      toast.error(message)
     } finally {
       setIsQuestionLoading(false)
     }
-  }, [router])
+  }, [])
 
   const handleComplete = useCallback(() => setGameStarted(true), [])
 
@@ -113,6 +147,30 @@ export default function GamePage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#FDECC8]">
         <span className="text-sm text-[#FF7500]/60">Loading question...</span>
+      </div>
+    )
+  }
+
+  if (authRequired) {
+    return (
+      <div className="flex min-h-screen flex-col bg-[#FDECC8] text-[#1A1A1A]">
+        <Navbar dark />
+        <div className="flex flex-1 items-center justify-center px-6 py-8 sm:py-14">
+          <div className="max-w-md text-center">
+            <h1 className="text-3xl font-black tracking-tight text-[#FF7500] uppercase sm:text-5xl">
+              Please Login First
+            </h1>
+            <p className="mt-3 text-sm text-[#1A1A1A]/65 sm:text-base">
+              The hunt is live. Sign in to access your current question and start playing.
+            </p>
+            <Link
+              href="/signin"
+              className="mt-6 inline-flex rounded-lg bg-[#FF7500] px-5 py-3 text-sm font-semibold text-[#FDECC8] transition hover:bg-[#e86a00]"
+            >
+              Go to Login
+            </Link>
+          </div>
+        </div>
       </div>
     )
   }
