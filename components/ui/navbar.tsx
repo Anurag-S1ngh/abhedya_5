@@ -31,7 +31,7 @@ export default function Navbar({ dark = false }: NavbarProps) {
           href="/"
           className="px-1 text-lg font-bold tracking-tight uppercase"
         >
-          prodyogiki
+          Abhedya
         </Link>
 
         {/* Center nav links */}

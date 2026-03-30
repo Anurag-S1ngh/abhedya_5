@@ -333,7 +333,7 @@ function LoginPage() {
             href="/"
             className="text-lg font-black tracking-tight uppercase"
           >
-            prodyogiki
+            Abhedya
           </Link>
         </div>
 
@@ -665,7 +665,7 @@ function LoginPage() {
           {/* Mobile Logo */}
           <div className="mb-12 flex items-center justify-center lg:hidden">
             <span className="text-lg font-black tracking-tight uppercase">
-              prodyogiki
+              Abhedya
             </span>
           </div>
 
