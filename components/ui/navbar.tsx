@@ -20,8 +20,8 @@ interface NavbarProps {
 export default function Navbar({ dark = false }: NavbarProps) {
   const [open, setOpen] = useState(false)
 
-  const color = dark ? "#1A1A1A" : "#FDECC8"
-  const borderColor = dark ? "rgba(26,26,26,0.15)" : "rgba(255,255,255,0.2)"
+  const color = "#FDECC8"
+  const borderColor = "rgba(253,236,200,0.18)"
 
   return (
     <nav className="w-full bg-transparent px-6 py-4" style={{ color }}>
@@ -76,7 +76,7 @@ export default function Navbar({ dark = false }: NavbarProps) {
 
       {/* Mobile menu */}
       {open && (
-        <div className="mt-3 flex flex-col gap-4 rounded-xl border-2 border-[#FF7500]/40 bg-[#FDECC8] px-4 py-4 text-[#1A1A1A] md:hidden">
+        <div className="mt-3 flex flex-col gap-4 rounded-xl border-2 border-[#FDECC8]/15 bg-[#111111] px-4 py-4 text-[#FDECC8] md:hidden">
           {navLinks.map((link) => (
             <Link
               key={link.label}

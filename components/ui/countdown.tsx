@@ -53,7 +53,7 @@ export default function Countdown({ target, onComplete }: CountdownProps) {
   ]
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FDECC8] text-[#1A1A1A]">
+    <div className="flex min-h-screen flex-col bg-[#0a0a0a] text-[#FDECC8]">
       <Navbar dark />
       <div className="flex flex-1 flex-col items-center justify-center gap-8 px-4 py-10 sm:gap-10 sm:px-6">
         <div className="text-center">
@@ -68,10 +68,10 @@ export default function Countdown({ target, onComplete }: CountdownProps) {
         <div className="grid grid-cols-4 gap-2 sm:gap-6">
           {units.map(({ label, value }) => (
             <div key={label} className="flex flex-col items-center gap-1.5">
-              <div className="flex h-16 w-16 items-center justify-center rounded-xl border-2 border-[#FF7500]/20 bg-[#FF7500]/5 text-2xl font-black tabular-nums text-[#FF7500] sm:h-24 sm:w-24 sm:text-4xl md:h-32 md:w-32 md:text-5xl">
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl border-2 border-[#FDECC8]/15 bg-[#111111] text-2xl font-black tabular-nums text-[#FDECC8] sm:h-24 sm:w-24 sm:text-4xl md:h-32 md:w-32 md:text-5xl">
                 {pad(value)}
               </div>
-              <span className="text-[10px] font-semibold tracking-widest text-[#1A1A1A]/50 uppercase sm:text-xs">
+              <span className="text-[10px] font-semibold tracking-widest text-[#FDECC8]/50 uppercase sm:text-xs">
                 {label}
               </span>
             </div>

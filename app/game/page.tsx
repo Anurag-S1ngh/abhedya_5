@@ -16,7 +16,7 @@ import {
 import { parseMarkdown } from "./parseMarkdown"
 
 const GAME_START = new Date(
-  process.env.NEXT_PUBLIC_GAME_START ?? "2026-04-01T22:00:00+05:30"
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-03-01T22:00:00+05:30"
 )
 
 export default function GamePage() {
@@ -132,7 +132,7 @@ export default function GamePage() {
   // Loading state
   if (!startTime) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FDECC8]">
+      <div className="flex min-h-screen items-center justify-center bg-[#88B7BD]">
         <span className="text-sm text-[#FF7500]/60">Loading…</span>
       </div>
     )
@@ -145,7 +145,7 @@ export default function GamePage() {
 
   if (isQuestionLoading && !currentQuestion) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FDECC8]">
+      <div className="flex min-h-screen items-center justify-center bg-[#88B7BD]">
         <span className="text-sm text-[#FF7500]/60">Loading question...</span>
       </div>
     )
@@ -153,14 +153,14 @@ export default function GamePage() {
 
   if (authRequired) {
     return (
-      <div className="flex min-h-screen flex-col bg-[#FDECC8] text-[#1A1A1A]">
+      <div className="flex min-h-screen flex-col bg-[#88B7BD] text-[#FDECC8]">
         <Navbar dark />
         <div className="flex flex-1 items-center justify-center px-6 py-8 sm:py-14">
           <div className="max-w-md text-center">
             <h1 className="text-3xl font-black tracking-tight text-[#FF7500] uppercase sm:text-5xl">
               Please Login First
             </h1>
-            <p className="mt-3 text-sm text-[#1A1A1A]/65 sm:text-base">
+            <p className="mt-3 text-sm text-[#FDECC8]/65 sm:text-base">
               The hunt is live. Sign in to access your current question and start playing.
             </p>
             <Link
@@ -177,7 +177,7 @@ export default function GamePage() {
 
   if (!currentQuestion) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FDECC8]">
+      <div className="flex min-h-screen items-center justify-center bg-[#88B7BD]">
         <span className="text-sm text-[#FF7500]/60">
           Unable to load your current question.
         </span>
@@ -186,13 +186,13 @@ export default function GamePage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FDECC8] text-[#1A1A1A]">
+    <div className="flex min-h-screen flex-col bg-[#88B7BD] text-[#FDECC8]">
       <Navbar dark />
 
       <div className="flex w-full flex-1 flex-col px-6 py-8 sm:py-14">
         {/* Question counter */}
         <div className="mb-8 flex items-center justify-between sm:mb-12">
-          <h2 className="text-2xl font-black tracking-tight text-[#FF7500] uppercase sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-black tracking-tight text-[#0a0a0a] uppercase sm:text-4xl md:text-5xl">
             Question {currentQuestion.questionNumber}
           </h2>
         </div>
@@ -201,18 +201,20 @@ export default function GamePage() {
         <div className="flex flex-1 flex-col gap-5 sm:gap-6">
           {/* Question text */}
           <div
-            className="prose max-w-none text-base leading-relaxed text-[#1A1A1A] sm:text-lg md:text-xl"
+            className="prose max-w-none text-base leading-relaxed text-[#FDECC8] sm:text-lg md:text-xl"
             dangerouslySetInnerHTML={{
               __html: parseMarkdown(currentQuestion.question),
             }}
           />
 
           {currentQuestion.imgSrc ? (
-            <img
-              src={currentQuestion.imgSrc}
-              alt={`Question ${currentQuestion.questionNumber}`}
-              className="max-h-[420px] w-full rounded-lg border border-[#1A1A1A]/10 object-contain"
-            />
+            <div className="w-fit max-w-full rounded-lg border border-[#FDECC8]/10 bg-[#111111] p-2">
+              <img
+                src={currentQuestion.imgSrc}
+                alt={`Question ${currentQuestion.questionNumber}`}
+                className="block h-auto max-h-[420px] w-auto max-w-full rounded-md object-contain"
+              />
+            </div>
           ) : null}
 
           {/* Answer input */}
@@ -221,7 +223,7 @@ export default function GamePage() {
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
             placeholder="Type your answer here…"
-            className="w-full rounded-lg border border-[#1A1A1A]/20 bg-[#1A1A1A]/5 px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#1A1A1A]/30 transition outline-none focus:border-[#FF7500]/60 focus:ring-1 focus:ring-[#FF7500]/30 sm:px-5 sm:py-4 sm:text-base"
+            className="w-full rounded-lg border border-[#FDECC8]/15 bg-[#FDECC8] px-4 py-3 text-sm text-[#0a0a0a] placeholder-[#0a0a0a]/45 transition outline-none focus:border-[#0a0a0a]/35 focus:ring-1 focus:ring-[#0a0a0a]/20 sm:px-5 sm:py-4 sm:text-base"
           />
 
           {/* Actions */}
@@ -237,7 +239,7 @@ export default function GamePage() {
             <button
               onClick={() => setAnswer("")}
               title="Clear"
-              className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#1A1A1A]/20 text-[#1A1A1A]/50 transition hover:border-[#1A1A1A]/40 hover:text-[#1A1A1A]/80"
+              className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#FDECC8]/15 text-[#FDECC8]/50 transition hover:border-[#FDECC8]/35 hover:text-[#FDECC8]/80"
             >
               <X size={18} />
             </button>

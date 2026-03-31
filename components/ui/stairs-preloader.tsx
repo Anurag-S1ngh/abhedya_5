@@ -26,7 +26,7 @@ type OverlayPhase = "idle" | "in" | "out"
 export default function StairsPreloader({
   columns = 8,
   duration = 1200,
-  color = "#FF7500",
+  color = "#88B7BD",
   overlay,
   waveDuration = 1000,
   overlayHoldDuration = 600,
@@ -124,7 +124,7 @@ export default function StairsPreloader({
       >
         <InfinityLoader
           size={64}
-          className="stroke-[#FF7500] [&_path]:stroke-[#ff7500]"
+          className="stroke-[#FDECC8] [&_path]:stroke-[#FDECC8]"
         />
       </div>
 

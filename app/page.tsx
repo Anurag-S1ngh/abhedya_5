@@ -19,7 +19,7 @@ export default function Page() {
         columns={8}
         duration={1000}
         overlayHoldDuration={0}
-        color="#FDECC8"
+        color="#88B7BD"
       />
       <HomeRipple>
         <Navbar />

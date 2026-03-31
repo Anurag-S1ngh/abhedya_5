@@ -33,7 +33,7 @@ export default function HomeRipple({
       dropRadius={isMobile ? 38 : 55}
       perturbance={isMobile ? 1.35 : 3}
       interactive={true}
-      tiltStrength={isMobile ? 2 : 10}
+      tiltStrength={isMobile ? 2 : 6}
       grainStrength={0.1}
       textConfig={{
         lines: ["ABHEDYA 5.0"],
@@ -41,7 +41,7 @@ export default function HomeRipple({
         color: "#FDECC8",
         fontWeight: "1000",
       }}
-      backgroundColor="#FF7500"
+      backgroundColor="#88B7BD"
     >
       {children}
     </WaterRipple>

@@ -349,7 +349,7 @@ function LoginPage() {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       {/* Left Content Section */}
-      <div className="relative hidden flex-col justify-between bg-gradient-to-br from-primary/90 via-primary to-primary/80 p-12 text-primary-foreground lg:flex">
+      <div className="relative hidden flex-col justify-between bg-[#88B7BD] p-12 text-[#FDECC8] lg:flex">
         <div className="relative z-20">
           <Link004
             href="/"
@@ -554,7 +554,7 @@ function LoginPage() {
                 width: "240px",
                 height: "200px",
                 zIndex: 3,
-                backgroundColor: "#FF9B6B",
+                backgroundColor: "#88B7BD",
                 borderRadius: "120px 120px 0 0",
                 transform:
                   password.length > 0 && showPassword
@@ -682,7 +682,7 @@ function LoginPage() {
       </div>
 
       {/* Right Login Section */}
-      <div className="flex items-center justify-center bg-background p-8">
+      <div className="flex items-center justify-center bg-[#000000] p-8 text-[#FDECC8]">
         <div className="w-full max-w-[420px]">
           {/* Mobile Logo */}
           <div className="mb-12 flex items-center justify-center lg:hidden">
@@ -696,7 +696,7 @@ function LoginPage() {
             <h1 className="mb-2 text-3xl font-bold tracking-tight">
               Create an Account
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-[#FDECC8]/60">
               Please enter your details
             </p>
           </div>
@@ -704,7 +704,7 @@ function LoginPage() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-sm font-medium">
+              <Label htmlFor="username" className="text-sm font-medium text-[#FDECC8]">
                 Username
               </Label>
               <Input
@@ -717,12 +717,12 @@ function LoginPage() {
                 onFocus={() => setIsTyping(true)}
                 onBlur={() => setIsTyping(false)}
                 required
-                className="h-12 border-border/60 bg-background focus:border-primary"
+                className="h-12 border-[#FDECC8]/15 bg-transparent text-[#FDECC8] placeholder:text-[#FDECC8]/35 focus:border-[#88B7BD]"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
+              <Label htmlFor="email" className="text-sm font-medium text-[#FDECC8]">
                 Email
               </Label>
               <Input
@@ -735,12 +735,12 @@ function LoginPage() {
                 onFocus={() => setIsTyping(true)}
                 onBlur={() => setIsTyping(false)}
                 required
-                className="h-12 border-border/60 bg-background focus:border-primary"
+                className="h-12 border-[#FDECC8]/15 bg-transparent text-[#FDECC8] placeholder:text-[#FDECC8]/35 focus:border-[#88B7BD]"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium">
+              <Label htmlFor="password" className="text-sm font-medium text-[#FDECC8]">
                 Password
               </Label>
               <div className="relative">
@@ -751,12 +751,12 @@ function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-12 border-border/60 bg-background pr-10 focus:border-primary"
+                  className="h-12 border-[#FDECC8]/15 bg-transparent pr-10 text-[#FDECC8] placeholder:text-[#FDECC8]/35 focus:border-[#88B7BD]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                  className="absolute top-1/2 right-3 -translate-y-1/2 text-[#FDECC8]/55 transition-colors hover:text-[#FDECC8]"
                 >
                   {showPassword ? (
                     <EyeOff className="size-5" />
@@ -775,7 +775,7 @@ function LoginPage() {
 
             <Button
               type="submit"
-              className="h-12 w-full text-base font-medium"
+              className="h-12 w-full bg-[#88B7BD] text-[#000000] hover:bg-[#76a7ae] text-base font-medium"
               size="lg"
               disabled={isLoading}
             >
@@ -784,11 +784,11 @@ function LoginPage() {
           </form>
 
           {/* Sign Up Link */}
-          <div className="mt-8 text-center text-sm text-muted-foreground">
+          <div className="mt-8 text-center text-sm text-[#FDECC8]/60">
             Already have an account?{" "}
             <Link
               href="/signin"
-              className="font-medium text-foreground underline-offset-4 hover:underline"
+              className="font-medium text-[#88B7BD] underline-offset-4 hover:underline"
             >
               Log in
             </Link>

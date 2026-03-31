@@ -3,7 +3,7 @@ import { apiClient } from "./client"
 export interface LeaderboardUser {
   id: number
   username: string
-  score: number
+  current_question: number
   last_solved_at: string | null
   created_at: string
 }
@@ -16,12 +16,12 @@ export interface LeaderboardResponse {
 interface RawLeaderboardUser {
   id?: number
   username?: string
-  score?: number
+  current_question?: number
   last_solved_at?: string | null
   created_at?: string
   ID?: number
   Username?: string
-  Score?: number
+  CurrentQuestion?: number
   LastSolvedAt?: string | null
   CreatedAt?: string
 }
@@ -39,7 +39,8 @@ export async function getLeaderboard() {
     users: data.users.map((user) => ({
       id: user.id ?? user.ID ?? 0,
       username: user.username ?? user.Username ?? "",
-      score: user.score ?? user.Score ?? 0,
+      current_question:
+        user.current_question ?? user.CurrentQuestion ?? 0,
       last_solved_at: user.last_solved_at ?? user.LastSolvedAt ?? null,
       created_at: user.created_at ?? user.CreatedAt ?? "",
     })),

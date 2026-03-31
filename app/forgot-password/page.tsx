@@ -88,13 +88,13 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FDECC8] px-4">
-      <Card className="w-full max-w-md border-0 bg-[#FDECC8] text-[#FF7500] shadow-none">
+    <div className="flex min-h-screen items-center justify-center bg-[#88B7BD] px-4">
+      <Card className="w-full max-w-md border border-[#FDECC8]/10 bg-[#88B7BD] text-[#FDECC8] shadow-none">
         <CardHeader>
-          <CardTitle className="text-2xl font-black text-[#FF7500]">
+          <CardTitle className="text-2xl font-black text-[#FDECC8]">
             Forgot password
           </CardTitle>
-          <CardDescription className="text-[#FF7500]/60">
+          <CardDescription className="text-[#FDECC8]/60">
             Request an OTP and set a new password for your account.
           </CardDescription>
         </CardHeader>
@@ -108,7 +108,7 @@ export default function ForgotPasswordPage() {
               value={email}
               onChange={(e) => setEmail(normalizeNithEmail(e.target.value))}
               placeholder="24bcs108@nith.ac.in"
-              className="border-[#FF7500]/20 bg-[#FDECC8]"
+              className="border-[#FDECC8]/15 bg-[#0f0f0f] text-[#FDECC8]"
             />
           </div>
 
@@ -116,7 +116,7 @@ export default function ForgotPasswordPage() {
             type="button"
             onClick={handleSendOTP}
             disabled={isSending}
-            className="w-full bg-[#FF7500] text-[#FDECC8] hover:bg-[#333]"
+            className="w-full bg-[#FF7500] text-[#FDECC8] hover:bg-[#e86a00]"
           >
             {isSending ? "Sending..." : "Send OTP"}
           </Button>
@@ -130,7 +130,7 @@ export default function ForgotPasswordPage() {
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
                   placeholder="Enter the OTP"
-                  className="border-[#FF7500]/20 bg-[#FDECC8]"
+                  className="border-[#FDECC8]/15 bg-[#0f0f0f] text-[#FDECC8]"
                 />
               </div>
 
@@ -142,7 +142,7 @@ export default function ForgotPasswordPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter a new password"
-                  className="border-[#FF7500]/20 bg-[#FDECC8]"
+                  className="border-[#FDECC8]/15 bg-[#0f0f0f] text-[#FDECC8]"
                 />
               </div>
             </>
@@ -154,14 +154,14 @@ export default function ForgotPasswordPage() {
             type="button"
             onClick={handleResetPassword}
             disabled={!otpSent || isResetting}
-            className="w-full bg-[#FF7500] text-[#FDECC8] hover:bg-[#333]"
+            className="w-full bg-[#FF7500] text-[#FDECC8] hover:bg-[#e86a00]"
           >
             {isResetting ? "Resetting..." : "Reset password"}
           </Button>
 
           <Link
             href="/signin"
-            className="text-center text-sm font-medium text-[#FF7500] underline-offset-4 hover:underline"
+            className="text-center text-sm font-medium text-[#FDECC8] underline-offset-4 hover:underline"
           >
             Back to login
           </Link>

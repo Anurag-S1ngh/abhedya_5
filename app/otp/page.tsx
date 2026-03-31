@@ -131,15 +131,15 @@ function OTPPageContent() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FDECC8] px-4">
-      <Card className="w-full max-w-md border-0 border-[#FF7500]/20 bg-[#FDECC8] text-[#FF7500] shadow-none">
+    <div className="flex min-h-screen items-center justify-center bg-[#88B7BD] px-4">
+      <Card className="w-full max-w-md border border-[#FDECC8]/10 bg-[#88B7BD] text-[#FDECC8] shadow-none">
         <CardHeader>
-          <CardTitle className="text-2xl font-black text-[#FF7500]">
+          <CardTitle className="text-2xl font-black text-[#FDECC8]">
             Verify your login
           </CardTitle>
-          <CardDescription className="text-[#FF7500]/60">
+          <CardDescription className="text-[#FDECC8]/60">
             Enter the verification code we sent to your email address:{" "}
-            <span className="font-semibold text-[#FF7500]">
+            <span className="font-semibold text-[#FDECC8]">
               {email || "your email"}
             </span>
             .
@@ -151,7 +151,7 @@ function OTPPageContent() {
             <div className="mb-3 flex items-center justify-between">
               <FieldLabel
                 htmlFor="otp-verification"
-                className="text-sm font-semibold text-[#FF7500]"
+                className="text-sm font-semibold text-[#FDECC8]"
               >
                 Verification code
               </FieldLabel>
@@ -163,13 +163,13 @@ function OTPPageContent() {
               value={otp}
               onChange={setOtp}
             >
-              <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:border-[#FF7500]/30 *:data-[slot=input-otp-slot]:bg-[#FDECC8] *:data-[slot=input-otp-slot]:text-xl *:data-[slot=input-otp-slot]:text-[#FF7500]">
-                <InputOTPSlot className="text-black" index={0} />
+              <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:border-[#FDECC8]/20 *:data-[slot=input-otp-slot]:bg-[#0f0f0f] *:data-[slot=input-otp-slot]:text-xl *:data-[slot=input-otp-slot]:text-[#FDECC8]">
+                <InputOTPSlot index={0} />
                 <InputOTPSlot index={1} />
                 <InputOTPSlot index={2} />
               </InputOTPGroup>
-              <InputOTPSeparator className="mx-2 text-[#FF7500]/40" />
-              <InputOTPGroup className="text-black *:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:border-[#FF7500]/30 *:data-[slot=input-otp-slot]:bg-[#FDECC8] *:data-[slot=input-otp-slot]:text-xl *:data-[slot=input-otp-slot]:text-[#FF7500]">
+              <InputOTPSeparator className="mx-2 text-[#FDECC8]/40" />
+              <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-12 *:data-[slot=input-otp-slot]:w-11 *:data-[slot=input-otp-slot]:border-[#FDECC8]/20 *:data-[slot=input-otp-slot]:bg-[#0f0f0f] *:data-[slot=input-otp-slot]:text-xl *:data-[slot=input-otp-slot]:text-[#FDECC8]">
                 <InputOTPSlot index={3} />
                 <InputOTPSlot index={4} />
                 <InputOTPSlot index={5} />
@@ -183,7 +183,7 @@ function OTPPageContent() {
             <Button
               onClick={handleVerify}
               disabled={isLoading}
-              className="w-full bg-[#FF7500] text-[#FDECC8] hover:bg-[#333]"
+              className="w-full bg-[#FF7500] text-[#FDECC8] hover:bg-[#e86a00]"
             >
               {isLoading ? "Verifying..." : "Verify"}
             </Button>
@@ -192,7 +192,7 @@ function OTPPageContent() {
               size="sm"
               onClick={handleResend}
               disabled={isResending || resendCooldown > 0}
-              className="gap-1.5 border-[#FF7500]/20 bg-transparent text-xs text-[#FF7500] hover:bg-[#FF7500] hover:text-[#FDECC8]"
+              className="gap-1.5 border-[#FDECC8]/15 bg-transparent text-xs text-[#FDECC8] hover:bg-[#FF7500] hover:text-[#FDECC8]"
             >
               <RefreshCwIcon size={12} />
               {isResending
@@ -212,7 +212,7 @@ export default function OTPPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-[#FDECC8] px-4 text-sm text-[#FF7500]/60">
+        <div className="flex min-h-screen items-center justify-center bg-[#88B7BD] px-4 text-sm text-[#FDECC8]/60">
           Loading verification page...
         </div>
       }
