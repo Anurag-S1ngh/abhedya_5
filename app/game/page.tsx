@@ -210,7 +210,7 @@ export default function GamePage() {
               <img
                 src={currentQuestion.imgSrc}
                 alt={`Question ${currentQuestion.questionNumber}`}
-                className="block h-auto max-h-[420px] w-auto max-w-full rounded-md object-contain"
+                className="block h-auto max-h-105 w-auto max-w-full rounded-md object-contain"
               />
             </div>
           ) : null}
