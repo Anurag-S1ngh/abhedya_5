@@ -57,10 +57,10 @@ export default function Countdown({ target, onComplete }: CountdownProps) {
       <Navbar dark />
       <div className="flex flex-1 flex-col items-center justify-center gap-8 px-4 py-10 sm:gap-10 sm:px-6">
         <div className="text-center">
-          <p className="text-xs font-semibold tracking-widest text-[#FF7500]/70 uppercase sm:text-sm">
+          <p className="text-xs font-semibold tracking-widest text-[#4d8fd6] uppercase sm:text-sm">
             Game starts in
           </p>
-          <h1 className="mt-2 text-3xl font-black tracking-tight text-[#FF7500] sm:text-5xl md:text-6xl">
+          <h1 className="mt-2 text-3xl font-black tracking-tight text-[#2f6fb6] sm:text-5xl md:text-6xl">
             ABHEDYA
           </h1>
         </div>
@@ -68,7 +68,7 @@ export default function Countdown({ target, onComplete }: CountdownProps) {
         <div className="grid grid-cols-4 gap-2 sm:gap-6">
           {units.map(({ label, value }) => (
             <div key={label} className="flex flex-col items-center gap-1.5">
-              <div className="flex h-16 w-16 items-center justify-center rounded-xl border-2 border-[#FDECC8]/15 bg-[#111111] text-2xl font-black tabular-nums text-[#FDECC8] sm:h-24 sm:w-24 sm:text-4xl md:h-32 md:w-32 md:text-5xl">
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl border-2 border-[#FDECC8]/15 bg-[#111111] text-2xl font-black text-[#FDECC8] tabular-nums sm:h-24 sm:w-24 sm:text-4xl md:h-32 md:w-32 md:text-5xl">
                 {pad(value)}
               </div>
               <span className="text-[10px] font-semibold tracking-widest text-[#FDECC8]/50 uppercase sm:text-xs">

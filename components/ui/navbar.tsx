@@ -11,6 +11,7 @@ import { Separator } from "./separator"
 const navLinks = [
   { label: "Game Page", href: "/game" },
   { label: "Leaderboard", href: "/leaderboard" },
+  { label: "Code of Conduct", href: "/code-of-conduct" },
   { label: "Events", href: "https://prody.nith.ac.in/events" },
 ]
 

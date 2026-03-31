@@ -116,7 +116,7 @@ export default function ForgotPasswordPage() {
             type="button"
             onClick={handleSendOTP}
             disabled={isSending}
-            className="w-full bg-[#FF7500] text-[#FDECC8] hover:bg-[#e86a00]"
+            className="w-full bg-[#0a0a0a] text-[#FDECC8] hover:bg-[#1c1c1c]"
           >
             {isSending ? "Sending..." : "Send OTP"}
           </Button>
@@ -154,7 +154,7 @@ export default function ForgotPasswordPage() {
             type="button"
             onClick={handleResetPassword}
             disabled={!otpSent || isResetting}
-            className="w-full bg-[#FF7500] text-[#FDECC8] hover:bg-[#e86a00]"
+            className="w-full bg-[#0a0a0a] text-[#FDECC8] hover:bg-[#1c1c1c]"
           >
             {isResetting ? "Resetting..." : "Reset password"}
           </Button>

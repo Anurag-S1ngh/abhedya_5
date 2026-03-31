@@ -43,10 +43,12 @@ export default function NotFound404({
           <EmptyMedia variant="icon">
             <Ghost className="h-16 w-16 text-muted-foreground" />
           </EmptyMedia>
-          <EmptyTitle className="bg-gradient-to-r from-primary via-primary/80 to-[#FF7500] bg-clip-text text-4xl font-bold text-transparent">
+          <EmptyTitle className="bg-linear-to-r from-[#0a0a0a] via-[#0a1f44] to-[#123a7a] bg-clip-text text-4xl font-bold text-transparent">
             404
           </EmptyTitle>
-          <EmptyDescription className="text-lg">{description}</EmptyDescription>
+          <EmptyDescription className="text-lg text-[#0a0a0a]">
+            {description}
+          </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
