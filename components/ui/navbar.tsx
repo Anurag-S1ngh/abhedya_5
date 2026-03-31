@@ -2,6 +2,7 @@
 
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { Link004 } from "./cssLinkButton"
 import { InteractiveHoverButton } from "./interactive-hover-button"
@@ -19,6 +20,7 @@ interface NavbarProps {
 
 export default function Navbar({ dark = false }: NavbarProps) {
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
 
   const color = "#FDECC8"
   const borderColor = "rgba(253,236,200,0.18)"
@@ -31,7 +33,7 @@ export default function Navbar({ dark = false }: NavbarProps) {
           href="/"
           className="px-1 text-lg font-bold tracking-tight uppercase"
         >
-          Abhedya
+          {pathname === "/" ? "PRODYOGIKI" : "ABHEDYA"}
         </Link>
 
         {/* Center nav links */}

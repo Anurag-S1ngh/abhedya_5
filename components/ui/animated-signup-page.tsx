@@ -554,7 +554,7 @@ function LoginPage() {
                 width: "240px",
                 height: "200px",
                 zIndex: 3,
-                backgroundColor: "#88B7BD",
+                backgroundColor: "#df5959",
                 borderRadius: "120px 120px 0 0",
                 transform:
                   password.length > 0 && showPassword

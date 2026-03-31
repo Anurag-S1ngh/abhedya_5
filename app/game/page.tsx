@@ -63,10 +63,7 @@ export default function GamePage() {
           }
 
           toast.error(
-            getApiErrorMessage(
-              retryError,
-              "Failed to load your question."
-            )
+            getApiErrorMessage(retryError, "Failed to load your question.")
           )
           return
         }
@@ -146,7 +143,7 @@ export default function GamePage() {
   if (isQuestionLoading && !currentQuestion) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#88B7BD]">
-        <span className="text-sm text-[#FF7500]/60">Loading question...</span>
+        <span className="text-sm text-[#0a0a0a]">Loading question...</span>
       </div>
     )
   }
@@ -161,7 +158,8 @@ export default function GamePage() {
               Please Login First
             </h1>
             <p className="mt-3 text-sm text-[#FDECC8]/65 sm:text-base">
-              The hunt is live. Sign in to access your current question and start playing.
+              The hunt is live. Sign in to access your current question and
+              start playing.
             </p>
             <Link
               href="/signin"
@@ -201,7 +199,7 @@ export default function GamePage() {
         <div className="flex flex-1 flex-col gap-5 sm:gap-6">
           {/* Question text */}
           <div
-            className="prose max-w-none text-base leading-relaxed text-[#FDECC8] sm:text-lg md:text-xl"
+            className="prose max-w-none text-base leading-relaxed text-[#0a0a0a] sm:text-lg md:text-xl"
             dangerouslySetInnerHTML={{
               __html: parseMarkdown(currentQuestion.question),
             }}

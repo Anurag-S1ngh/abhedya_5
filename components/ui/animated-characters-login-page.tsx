@@ -532,7 +532,7 @@ function LoginPage() {
                 width: "240px",
                 height: "200px",
                 zIndex: 3,
-                backgroundColor: "#88B7BD",
+                backgroundColor: "#FF7500",
                 borderRadius: "120px 120px 0 0",
                 transform:
                   password.length > 0 && showPassword
@@ -682,7 +682,10 @@ function LoginPage() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-sm font-medium text-[#FDECC8]">
+              <Label
+                htmlFor="username"
+                className="text-sm font-medium text-[#FDECC8]"
+              >
                 Username
               </Label>
               <Input
@@ -700,7 +703,10 @@ function LoginPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-[#FDECC8]">
+              <Label
+                htmlFor="password"
+                className="text-sm font-medium text-[#FDECC8]"
+              >
                 Password
               </Label>
               <div className="relative">
@@ -744,7 +750,7 @@ function LoginPage() {
 
             <Button
               type="submit"
-              className="h-12 w-full bg-[#88B7BD] text-[#000000] hover:bg-[#76a7ae] text-base font-medium"
+              className="h-12 w-full bg-[#88B7BD] text-base font-medium text-[#000000] hover:bg-[#76a7ae]"
               size="lg"
               disabled={isLoading}
             >
