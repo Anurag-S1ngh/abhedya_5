@@ -42,13 +42,10 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ── Sand palette ────────────────────────────────────────────────
-   Background : #f3e7d3 (light sand)
-   Foreground : #3e3326 (warm brown)
-   Accent     : #8f7a5f (earthy taupe)
-──────────────────────────────────────────────────────────────── */
-
 :root {
+  --font-sans: "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono:
+    "Cascadia Mono", Consolas, "SFMono-Regular", Menlo, Monaco, monospace;
   --background: #88b7bd;
   --foreground: #fdecc8;
   --card: #88b7bd;
