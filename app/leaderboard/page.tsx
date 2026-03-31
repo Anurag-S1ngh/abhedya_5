@@ -21,7 +21,7 @@ function barColor(rank: number) {
 }
 
 const GAME_START = new Date(
-  process.env.NEXT_PUBLIC_GAME_START ?? "2026-03-01T22:00:00+05:30"
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-04-01T22:00:00+05:30"
 )
 
 export default function LeaderboardPage() {
@@ -69,7 +69,9 @@ export default function LeaderboardPage() {
   }
 
   if (!gameStarted) {
-    return <Countdown target={startTime} onComplete={() => setGameStarted(true)} />
+    return (
+      <Countdown target={startTime} onComplete={() => setGameStarted(true)} />
+    )
   }
 
   const maxQuestion = players[0]?.current_question ?? 0
@@ -91,12 +93,12 @@ export default function LeaderboardPage() {
         <h1 className="mb-1 text-4xl font-black tracking-tight uppercase sm:text-6xl md:text-7xl">
           Leaderboard
         </h1>
-        <p className="mb-8 text-xs font-medium tracking-widest text-[oklch(21%_0.006_285.885)] uppercase sm:mb-10 sm:text-sm">
+        <p className="mb-8 text-xs font-medium tracking-widest text-zinc-900 uppercase sm:mb-10 sm:text-sm">
           Live standings
         </p>
 
         {error ? (
-          <div className="rounded-sm border border-[oklch(27.4%_0.006_286.033)]/30 bg-[oklch(14.1%_0.005_285.823)]/60 px-4 py-3 text-sm text-[#FDECC8]">
+          <div className="rounded-sm border border-zinc-800/30 bg-zinc-900/60 px-4 py-3 text-sm text-[#FDECC8]">
             {error}
           </div>
         ) : players.length === 0 ? (
