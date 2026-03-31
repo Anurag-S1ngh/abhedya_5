@@ -201,7 +201,7 @@ export default function GamePage() {
           <div
             className="prose max-w-none text-base leading-relaxed text-[#0a0a0a] sm:text-lg md:text-xl"
             dangerouslySetInnerHTML={{
-              __html: parseMarkdown(currentQuestion.question),
+              __html: (currentQuestion.question),
             }}
           />
 
