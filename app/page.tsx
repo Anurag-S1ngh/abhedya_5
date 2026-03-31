@@ -24,7 +24,7 @@ export default function Page() {
       <HomeRipple>
         <Navbar />
 
-        <div className="fixed right-4 bottom-24 z-30 sm:right-6 sm:bottom-8">
+        <div className="fixed inset-0 z-30 lg:translate-y-0 md:translate-y-0  translate-y-20 flex items-center justify-center sm:inset-auto sm:right-6 sm:bottom-2 sm:block">
           <Link
             href="/game"
             className="rounded-full border border-[#FDECC8]/80 bg-black/55 px-8 py-3 text-base font-semibold tracking-wide text-[#FDECC8] backdrop-blur-sm transition hover:scale-105 hover:bg-black/70 sm:text-lg"

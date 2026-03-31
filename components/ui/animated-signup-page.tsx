@@ -359,7 +359,7 @@ function LoginPage() {
           </Link004>
         </div>
 
-        <div className="relative z-20 flex h-[500px] items-end justify-center">
+        <div className="relative z-20 flex h-125 items-end justify-center">
           {/* Cartoon Characters */}
           <div className="relative" style={{ width: "550px", height: "400px" }}>
             {/* Purple tall rectangle character - Back layer */}
@@ -659,7 +659,7 @@ function LoginPage() {
               </div>
               {/* Horizontal line for mouth */}
               <div
-                className="absolute h-[4px] w-20 rounded-full bg-[#2D2D2D] transition-all duration-200 ease-out"
+                className="absolute h-1 w-20 rounded-full bg-[#2D2D2D] transition-all duration-200 ease-out"
                 style={{
                   left:
                     password.length > 0 && showPassword
@@ -676,14 +676,14 @@ function LoginPage() {
         </div>
 
         {/* Decorative elements */}
-        <div className="bg-grid-white/[0.05] absolute inset-0 bg-[size:20px_20px]" />
+        <div className="bg-grid-white/[0.05] absolute inset-0 bg-size-[20px_20px]" />
         <div className="absolute top-1/4 right-1/4 size-64 rounded-full bg-primary-foreground/10 blur-3xl" />
         <div className="absolute bottom-1/4 left-1/4 size-96 rounded-full bg-primary-foreground/5 blur-3xl" />
       </div>
 
       {/* Right Login Section */}
       <div className="flex items-center justify-center bg-[#000000] p-8 text-[#FDECC8]">
-        <div className="w-full max-w-[420px]">
+        <div className="w-full max-w-105">
           {/* Mobile Logo */}
           <div className="mb-12 flex items-center justify-center lg:hidden">
             <span className="text-lg font-black tracking-tight uppercase">

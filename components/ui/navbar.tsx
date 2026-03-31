@@ -94,7 +94,7 @@ export default function Navbar({ dark = false }: NavbarProps) {
               Sign Up
             </Link>
             <Separator
-              className="border-1 border-orange-400/30"
+              className="border border-orange-400/30"
               orientation="vertical"
             />
             <Link href="/signin" className="text-sm font-medium opacity-90">
