@@ -134,7 +134,7 @@ export default function LeaderboardPage() {
                     </div>
 
                     {/* Current question */}
-                    <span className="w-14 shrink-0 text-xs font-semibold text-[#FDECC8]/60 tabular-nums sm:w-20 sm:text-sm">
+                    <span className="w-14 shrink-0 rounded-full border border-[#FDECC8]/35 bg-[#FDECC8]/15 px-2 py-1 text-center text-xs font-black text-[#FDECC8] tabular-nums sm:w-20 sm:text-sm">
                       Q{p.current_question}
                     </span>
 
