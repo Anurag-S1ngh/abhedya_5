@@ -9,15 +9,18 @@ import {
   type LeaderboardUser,
 } from "@/lib/api"
 
-function maxWidth(rank: number) {
-  return 100 - (rank - 1) * 3
-}
+const BAR_COLORS = [
+  "#1e4a4e",
+  "#255f63",
+  "#2d7479",
+  "#358d92",
+  "#3da6ab",
+  "#4bbfc5",
+  "#59d8de",
+]
 
 function barColor(rank: number) {
-  if (rank === 1) return "oklch(37% 0.013 285.805)"
-  if (rank === 2) return "oklch(27.4% 0.006 286.033)"
-  if (rank === 3) return "oklch(21% 0.006 285.885)"
-  return "oklch(14.1% 0.005 285.823)"
+  return BAR_COLORS[Math.min(rank - 1, BAR_COLORS.length - 1)]
 }
 
 const GAME_START = new Date(
@@ -44,9 +47,7 @@ export default function LeaderboardPage() {
   }, [])
 
   useEffect(() => {
-    if (!gameStarted) {
-      return
-    }
+    if (!gameStarted) return
 
     async function loadLeaderboard() {
       try {
@@ -63,7 +64,7 @@ export default function LeaderboardPage() {
   if (!startTime) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#88B7BD]">
-        <span className="text-sm text-[#FF7500]/60">Loading…</span>
+        <span className="text-sm text-[#1a2e30]/60">Loading…</span>
       </div>
     )
   }
@@ -86,32 +87,33 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#88B7BD] text-[#FDECC8]">
+    <div className="min-h-screen bg-[#88B7BD]">
       <Navbar dark />
 
       <div className="w-full px-6 py-8 sm:py-14">
-        <h1 className="mb-1 text-4xl font-black tracking-tight uppercase sm:text-6xl md:text-7xl">
+        <h1 className="mb-1 text-4xl font-black tracking-tight uppercase text-[#1a2e30] sm:text-6xl md:text-7xl">
           Leaderboard
         </h1>
-        <p className="mb-8 text-xs font-medium tracking-widest text-zinc-900 uppercase sm:mb-10 sm:text-sm">
+        <p className="mb-8 text-xs font-semibold tracking-widest text-[#2a4448] uppercase sm:mb-10 sm:text-sm">
           Live standings
         </p>
 
         {error ? (
-          <div className="rounded-sm border border-zinc-800/30 bg-zinc-900/60 px-4 py-3 text-sm text-[#FDECC8]">
+          <div className="rounded-sm border border-[#1a2e30]/20 bg-[#1a2e30]/10 px-4 py-3 text-sm text-[#1a2e30]">
             {error}
           </div>
         ) : players.length === 0 ? (
-          <div className="text-sm text-[#FDECC8]/60">
+          <div className="text-sm text-[#1a2e30]/60">
             Loading leaderboard...
           </div>
         ) : (
           <div className="flex flex-col gap-2 sm:gap-3">
             {players.map((p, i) => {
               const rank = i + 1
+              const color = barColor(rank)
               const widthPct =
                 maxQuestion > 0
-                  ? (p.current_question / maxQuestion) * maxWidth(rank)
+                  ? (p.current_question / maxQuestion) * 88
                   : 0
               const delay = i * 80
               const avatarSize = 40
@@ -124,18 +126,15 @@ export default function LeaderboardPage() {
                     style={{
                       width: 28,
                       height: 28,
-                      background:
-                        rank <= 3
-                          ? barColor(rank)
-                          : "oklch(14.1% 0.005 285.823)",
-                      color: "#FDECC8",
+                      background: color,
+                      color: "#e8f5f6",
                     }}
                   >
                     {rank}
                   </div>
 
                   {/* Current question */}
-                  <span className="w-14 shrink-0 text-xs font-semibold text-[#FDECC8]/50 tabular-nums sm:w-20 sm:text-sm">
+                  <span className="w-14 shrink-0 text-xs font-bold text-[#1e3638]/80 tabular-nums sm:w-20 sm:text-sm">
                     Q{p.current_question}
                   </span>
 
@@ -148,18 +147,19 @@ export default function LeaderboardPage() {
                       className="absolute inset-y-0 left-0 rounded-sm transition-all duration-700 ease-out"
                       style={{
                         width: animated ? `${widthPct}%` : "0%",
-                        backgroundColor: barColor(rank),
+                        backgroundColor: color,
                         transitionDelay: `${delay}ms`,
                       }}
                     />
                     <div
-                      className="absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xs font-bold transition-all duration-700 ease-out"
+                      className="absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full font-bold transition-all duration-700 ease-out"
                       style={{
                         left: animated ? `${widthPct}%` : "0%",
                         transitionDelay: `${delay}ms`,
                         width: avatarSize,
                         height: avatarSize,
-                        background: barColor(rank),
+                        background: color,
+                        color: "#e8f5f6",
                         zIndex: 10,
                         fontSize: 11,
                       }}
@@ -169,7 +169,7 @@ export default function LeaderboardPage() {
                   </div>
 
                   {/* Name */}
-                  <span className="ml-4 w-24 shrink-0 text-xs font-semibold sm:w-36 sm:text-sm md:w-44 md:text-base">
+                  <span className="ml-4 w-24 shrink-0 text-xs font-bold text-[#152628] sm:w-36 sm:text-sm md:w-44 md:text-base">
                     {p.username}
                   </span>
                 </div>
