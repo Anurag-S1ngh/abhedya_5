@@ -27,7 +27,10 @@ export default function Navbar({ dark = false }: NavbarProps) {
   const borderColor = "rgba(253,236,200,0.18)"
 
   return (
-    <nav className="w-full bg-transparent px-6 py-4" style={{ color }}>
+    <nav
+      className="relative z-50 w-full bg-transparent px-6 py-4"
+      style={{ color }}
+    >
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link
