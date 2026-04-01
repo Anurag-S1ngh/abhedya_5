@@ -14,9 +14,9 @@ import {
   type QuestionResponse,
 } from "@/lib/api"
 import { parseMarkdown } from "./parseMarkdown"
-//process.env.NEXT_PUBLIC_GAME_START ??
+
 const GAME_START = new Date(
-   "2026-03-01T22:00:00+05:30"
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-03-01T22:00:00+05:30"
 )
 
 export default function GamePage() {
