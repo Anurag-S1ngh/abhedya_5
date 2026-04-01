@@ -64,7 +64,7 @@ export default function LeaderboardPage() {
   if (!startTime) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#88B7BD]">
-        <span className="text-sm text-[#1a2e30]/60">Loading…</span>
+        <span className="text-sm text-[#FDECC8]/60">Loading…</span>
       </div>
     )
   }
@@ -87,96 +87,99 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#88B7BD]">
+    <div className="min-h-screen bg-[#88B7BD] text-[#FDECC8]">
       <Navbar dark />
 
       <div className="w-full px-6 py-8 sm:py-14">
-        <h1 className="mb-1 text-4xl font-black tracking-tight uppercase text-[#1a2e30] sm:text-6xl md:text-7xl">
+        <h1 className="mb-1 text-4xl font-black tracking-tight uppercase sm:text-6xl md:text-7xl">
           Leaderboard
         </h1>
-        <p className="mb-8 text-xs font-semibold tracking-widest text-[#2a4448] uppercase sm:mb-10 sm:text-sm">
+        <p className="mb-8 text-xs font-semibold tracking-widest text-[#FDECC8]/70 uppercase sm:mb-10 sm:text-sm">
           Live standings
         </p>
 
-        {error ? (
-          <div className="rounded-sm border border-[#1a2e30]/20 bg-[#1a2e30]/10 px-4 py-3 text-sm text-[#1a2e30]">
-            {error}
-          </div>
-        ) : players.length === 0 ? (
-          <div className="text-sm text-[#1a2e30]/60">
-            Loading leaderboard...
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2 sm:gap-3">
-            {players.map((p, i) => {
-              const rank = i + 1
-              const color = barColor(rank)
-              const widthPct =
-                maxQuestion > 0
-                  ? (p.current_question / maxQuestion) * 88
-                  : 0
-              const delay = i * 80
-              const avatarSize = 40
+        {/* Card */}
+        <div className="rounded-2xl bg-[#1a2e30]/40 backdrop-blur-sm border border-[#FDECC8]/10 px-4 py-6 sm:px-6 sm:py-8">
+          {error ? (
+            <div className="rounded-sm border border-[#FDECC8]/20 bg-[#1a2e30]/40 px-4 py-3 text-sm text-[#FDECC8]">
+              {error}
+            </div>
+          ) : players.length === 0 ? (
+            <div className="text-sm text-[#FDECC8]/60">
+              Loading leaderboard...
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2 sm:gap-3">
+              {players.map((p, i) => {
+                const rank = i + 1
+                const color = barColor(rank)
+                const widthPct =
+                  maxQuestion > 0
+                    ? (p.current_question / maxQuestion) * 88
+                    : 0
+                const delay = i * 80
+                const avatarSize = 40
 
-              return (
-                <div key={p.id} className="flex items-center gap-2 sm:gap-4">
-                  {/* Rank square */}
-                  <div
-                    className="flex shrink-0 items-center justify-center rounded-sm text-xs font-black"
-                    style={{
-                      width: 28,
-                      height: 28,
-                      background: color,
-                      color: "#e8f5f6",
-                    }}
-                  >
-                    {rank}
-                  </div>
-
-                  {/* Current question */}
-                  <span className="w-14 shrink-0 text-xs font-bold text-[#1e3638]/80 tabular-nums sm:w-20 sm:text-sm">
-                    Q{p.current_question}
-                  </span>
-
-                  {/* Bar + avatar tip */}
-                  <div
-                    className="relative flex-1 overflow-visible"
-                    style={{ height: avatarSize, paddingRight: avatarSize / 2 }}
-                  >
+                return (
+                  <div key={p.id} className="flex items-center gap-2 sm:gap-4">
+                    {/* Rank square */}
                     <div
-                      className="absolute inset-y-0 left-0 rounded-sm transition-all duration-700 ease-out"
+                      className="flex shrink-0 items-center justify-center rounded-sm text-xs font-black"
                       style={{
-                        width: animated ? `${widthPct}%` : "0%",
-                        backgroundColor: color,
-                        transitionDelay: `${delay}ms`,
-                      }}
-                    />
-                    <div
-                      className="absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full font-bold transition-all duration-700 ease-out"
-                      style={{
-                        left: animated ? `${widthPct}%` : "0%",
-                        transitionDelay: `${delay}ms`,
-                        width: avatarSize,
-                        height: avatarSize,
+                        width: 28,
+                        height: 28,
                         background: color,
                         color: "#e8f5f6",
-                        zIndex: 10,
-                        fontSize: 11,
                       }}
                     >
-                      {getInitials(p.username)}
+                      {rank}
                     </div>
-                  </div>
 
-                  {/* Name */}
-                  <span className="ml-4 w-24 shrink-0 text-xs font-bold text-[#152628] sm:w-36 sm:text-sm md:w-44 md:text-base">
-                    {p.username}
-                  </span>
-                </div>
-              )
-            })}
-          </div>
-        )}
+                    {/* Current question */}
+                    <span className="w-14 shrink-0 text-xs font-semibold text-[#FDECC8]/60 tabular-nums sm:w-20 sm:text-sm">
+                      Q{p.current_question}
+                    </span>
+
+                    {/* Bar + avatar tip */}
+                    <div
+                      className="relative flex-1 overflow-visible"
+                      style={{ height: avatarSize, paddingRight: avatarSize / 2 }}
+                    >
+                      <div
+                        className="absolute inset-y-0 left-0 rounded-sm transition-all duration-700 ease-out"
+                        style={{
+                          width: animated ? `${widthPct}%` : "0%",
+                          backgroundColor: color,
+                          transitionDelay: `${delay}ms`,
+                        }}
+                      />
+                      <div
+                        className="absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full font-bold transition-all duration-700 ease-out"
+                        style={{
+                          left: animated ? `${widthPct}%` : "0%",
+                          transitionDelay: `${delay}ms`,
+                          width: avatarSize,
+                          height: avatarSize,
+                          background: color,
+                          color: "#e8f5f6",
+                          zIndex: 10,
+                          fontSize: 11,
+                        }}
+                      >
+                        {getInitials(p.username)}
+                      </div>
+                    </div>
+
+                    {/* Name */}
+                    <span className="ml-4 w-24 shrink-0 text-xs font-semibold text-[#FDECC8] sm:w-36 sm:text-sm md:w-44 md:text-base">
+                      {p.username}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
