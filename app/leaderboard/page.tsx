@@ -10,13 +10,13 @@ import {
 } from "@/lib/api"
 
 const BAR_COLORS = [
-  "#1e4a4e",
-  "#255f63",
-  "#2d7479",
-  "#358d92",
-  "#3da6ab",
-  "#4bbfc5",
-  "#59d8de",
+  "#9fd0d4",
+  "#a9d6da",
+  "#b3dcdf",
+  "#bde2e5",
+  "#c7e8ea",
+  "#d1eeef",
+  "#dbf4f4",
 ]
 
 function barColor(rank: number) {
@@ -99,9 +99,9 @@ export default function LeaderboardPage() {
         </p>
 
         {/* Card */}
-        <div className="rounded-2xl bg-[#1a2e30]/40 backdrop-blur-sm border border-[#FDECC8]/10 px-4 py-6 sm:px-6 sm:py-8">
+        <div className="rounded-2xl border border-[#FDECC8]/12 bg-[#142426]/55 px-4 py-6 backdrop-blur-sm sm:px-6 sm:py-8">
           {error ? (
-            <div className="rounded-sm border border-[#FDECC8]/20 bg-[#1a2e30]/40 px-4 py-3 text-sm text-[#FDECC8]">
+            <div className="rounded-sm border border-[#FDECC8]/20 bg-[#142426]/55 px-4 py-3 text-sm text-[#FDECC8]">
               {error}
             </div>
           ) : players.length === 0 ? (
@@ -114,9 +114,7 @@ export default function LeaderboardPage() {
                 const rank = i + 1
                 const color = barColor(rank)
                 const widthPct =
-                  maxQuestion > 0
-                    ? (p.current_question / maxQuestion) * 88
-                    : 0
+                  maxQuestion > 0 ? (p.current_question / maxQuestion) * 88 : 0
                 const delay = i * 80
                 const avatarSize = 40
 
@@ -129,7 +127,7 @@ export default function LeaderboardPage() {
                         width: 28,
                         height: 28,
                         background: color,
-                        color: "#e8f5f6",
+                        color: "#102126",
                       }}
                     >
                       {rank}
@@ -143,7 +141,10 @@ export default function LeaderboardPage() {
                     {/* Bar + avatar tip */}
                     <div
                       className="relative flex-1 overflow-visible"
-                      style={{ height: avatarSize, paddingRight: avatarSize / 2 }}
+                      style={{
+                        height: avatarSize,
+                        paddingRight: avatarSize / 2,
+                      }}
                     >
                       <div
                         className="absolute inset-y-0 left-0 rounded-sm transition-all duration-700 ease-out"
@@ -161,7 +162,7 @@ export default function LeaderboardPage() {
                           width: avatarSize,
                           height: avatarSize,
                           background: color,
-                          color: "#e8f5f6",
+                          color: "#102126",
                           zIndex: 10,
                           fontSize: 11,
                         }}
