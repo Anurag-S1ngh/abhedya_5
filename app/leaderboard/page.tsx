@@ -9,15 +9,9 @@ import {
   type LeaderboardUser,
 } from "@/lib/api"
 
-const BAR_COLORS = [
-  "#9fd0d4",
-  "#a9d6da",
-  "#b3dcdf",
-  "#bde2e5",
-  "#c7e8ea",
-  "#d1eeef",
-  "#dbf4f4",
-]
+const BAR_COLORS = ["#000000"]
+
+const HOVER_BAR_COLOR = "#ffffff"
 
 function barColor(rank: number) {
   return BAR_COLORS[Math.min(rank - 1, BAR_COLORS.length - 1)]
@@ -29,13 +23,14 @@ const GAME_START = new Date(
 
 export default function LeaderboardPage() {
   const [animated, setAnimated] = useState(false)
+  const [hoveredPlayerId, setHoveredPlayerId] = useState<number | null>(null)
   const [startTime, setStartTime] = useState<Date | null>(null)
   const [gameStarted, setGameStarted] = useState(false)
   const [players, setPlayers] = useState<LeaderboardUser[]>([])
   const [error, setError] = useState("")
 
   useEffect(() => {
-    const t = setTimeout(() => setAnimated(true), 100)
+    const t = setTimeout(() => setAnimated(true), 0)
     return () => clearTimeout(t)
   }, [])
 
@@ -99,9 +94,9 @@ export default function LeaderboardPage() {
         </p>
 
         {/* Card */}
-        <div className="rounded-2xl border border-[#FDECC8]/12 bg-[#142426]/55 px-4 py-6 backdrop-blur-sm sm:px-6 sm:py-8">
+        <div className="rounded-2xl border border-[#FDECC8]/10 bg-[#1a2e30]/40 px-4 py-6 shadow-[0_18px_45px_rgba(0,0,0,0.85)] backdrop-blur-sm sm:px-6 sm:py-8">
           {error ? (
-            <div className="rounded-sm border border-[#FDECC8]/20 bg-[#142426]/55 px-4 py-3 text-sm text-[#FDECC8]">
+            <div className="rounded-sm border border-[#FDECC8]/20 bg-[#1a2e30]/40 px-4 py-3 text-sm text-[#FDECC8]">
               {error}
             </div>
           ) : players.length === 0 ? (
@@ -112,14 +107,29 @@ export default function LeaderboardPage() {
             <div className="flex flex-col gap-2 sm:gap-3">
               {players.map((p, i) => {
                 const rank = i + 1
-                const color = barColor(rank)
+                const isHovered = hoveredPlayerId === p.id
+                const color = isHovered ? HOVER_BAR_COLOR : barColor(rank)
+                const markerTextColor = isHovered ? "#0a0a0a" : "#e8f5f6"
                 const widthPct =
                   maxQuestion > 0 ? (p.current_question / maxQuestion) * 88 : 0
                 const delay = i * 80
                 const avatarSize = 40
 
                 return (
-                  <div key={p.id} className="flex items-center gap-2 sm:gap-4">
+                  <div
+                    key={p.id}
+                    className="flex items-center gap-2 rounded-xl px-2 py-1.5 transition-all duration-300 ease-out sm:gap-4"
+                    style={{
+                      transform: isHovered
+                        ? "translateY(-3px)"
+                        : "translateY(0)",
+                      boxShadow: isHovered
+                        ? "0 10px 24px rgba(0, 0, 0, 0.35)"
+                        : "0 0 0 rgba(0, 0, 0, 0)",
+                    }}
+                    onMouseEnter={() => setHoveredPlayerId(p.id)}
+                    onMouseLeave={() => setHoveredPlayerId(null)}
+                  >
                     {/* Rank square */}
                     <div
                       className="flex shrink-0 items-center justify-center rounded-sm text-xs font-black"
@@ -127,14 +137,14 @@ export default function LeaderboardPage() {
                         width: 28,
                         height: 28,
                         background: color,
-                        color: "#102126",
+                        color: markerTextColor,
                       }}
                     >
                       {rank}
                     </div>
 
                     {/* Current question */}
-                    <span className="w-14 shrink-0 rounded-full border border-[#FDECC8]/35 bg-[#FDECC8]/15 px-2 py-1 text-center text-xs font-black text-[#FDECC8] tabular-nums sm:w-20 sm:text-sm">
+                    <span className="w-14 shrink-0 rounded-full border border-[#0f1f23]/35 bg-[#FDECC8] px-2 py-1 text-center text-xs font-black text-[#0f1f23] tabular-nums shadow-[0_4px_12px_rgba(0,0,0,0.25)] sm:w-20 sm:text-sm">
                       Q{p.current_question}
                     </span>
 
@@ -147,22 +157,22 @@ export default function LeaderboardPage() {
                       }}
                     >
                       <div
-                        className="absolute inset-y-0 left-0 rounded-sm transition-all duration-700 ease-out"
+                        className="absolute inset-y-0 left-0 rounded-sm"
                         style={{
                           width: animated ? `${widthPct}%` : "0%",
                           backgroundColor: color,
-                          transitionDelay: `${delay}ms`,
+                          transition: `width 700ms ease-out ${delay}ms, background-color 120ms ease-out`,
                         }}
                       />
                       <div
-                        className="absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full font-bold transition-all duration-700 ease-out"
+                        className="absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full font-bold"
                         style={{
                           left: animated ? `${widthPct}%` : "0%",
-                          transitionDelay: `${delay}ms`,
+                          transition: `left 700ms ease-out ${delay}ms, background-color 120ms ease-out, color 120ms ease-out`,
                           width: avatarSize,
                           height: avatarSize,
                           background: color,
-                          color: "#102126",
+                          color: markerTextColor,
                           zIndex: 10,
                           fontSize: 11,
                         }}
