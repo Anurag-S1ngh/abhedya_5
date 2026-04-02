@@ -16,7 +16,7 @@ import {
 import { parseMarkdown } from "./parseMarkdown"
 
 const GAME_START = new Date(
-  process.env.NEXT_PUBLIC_GAME_START ?? "2026-04-01T22:00:00+05:30"
+  process.env.NEXT_PUBLIC_GAME_START ?? "2026-03-01T22:00:00+05:30"
 )
 
 export default function GamePage() {
@@ -224,7 +224,7 @@ export default function GamePage() {
           <div
             className="text-base leading-relaxed text-[#0a0a0a]/80 sm:text-lg"
             dangerouslySetInnerHTML={{
-              __html: currentQuestion.question.replace(/\n/g, "<br/>"),
+              __html: parseMarkdown(currentQuestion.question),
             }}
           />
 
